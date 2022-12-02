@@ -27,7 +27,7 @@
     
     {% if section.settings.show_right_fade == true %}
     #{{ section.settings.uuid }} .{{ section.settings.container-class }}:after{
-        content:'';
+        content:''; 
         Display:block;
         background: linear-gradient(270deg, {{section.settings.fade_color-right}} 0%, rgba(0,0,0,0) {{section.settings.right_fade_percentage}});
         height:100%;
