@@ -1,0 +1,67 @@
+
+{{ 'bootstrap.min.css' | asset_url | stylesheet_tag }}
+{{ 'styles.css' | asset_url | stylesheet_tag }}
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+{% comment %}
+/* <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script> */
+{% endcomment %}
+
+
+<style>
+      body{
+        font-family:'HKGP';   
+        font-weight: 400;
+      }
+  
+  @font-face {
+  font-family: 'HKGP';
+  font-weight: 300;
+  src: url('https://cdn.shopify.com/s/files/1/0095/4332/files/hkgroteskpro-light-webfont_0f41b6bd-3918-41e5-a34c-56e2402b13be.woff?v=1665039068') format('woff'),
+       url('https://cdn.shopify.com/s/files/1/0095/4332/files/hkgroteskpro-light-webfont_1e52e72b-1f8c-452f-82f6-a44c735e0218.woff2?v=1665039068') format('woff2');
+}
+
+@font-face {
+  font-family: 'HKGP';
+  font-weight: 400;
+  
+  src: url('https://cdn.shopify.com/s/files/1/0095/4332/files/hkgroteskpro-regular-webfont-webfont_2f57f976-7956-42d9-ba0b-f1a49a827928.woff?v=1665039068') format('woff'),
+       url('https://cdn.shopify.com/s/files/1/0095/4332/files/hkgroteskpro-regular-webfont-webfont_c8bdff87-4718-4678-9aa9-c2b142978aae.woff2?v=1665039070') format('woff2');
+  
+}  
+  
+@font-face {
+  font-family: 'HKGP';
+  font-weight: 500;
+  src: url('https://cdn.shopify.com/s/files/1/0095/4332/files/HKGroteskPro-Medium.woff?v=1613690110') format('woff'),
+       url('https://cdn.shopify.com/s/files/1/0095/4332/files/HKGroteskPro-Medium.woff2?v=1613690110') format('woff2');
+}
+
+@font-face {
+  font-family: 'HKGP';
+  font-weight: 700;
+  src: url('https://cdn.shopify.com/s/files/1/0095/4332/files/hkgroteskpro-bold-webfont.woff?v=1665039037') format('woff'),
+       url('https://cdn.shopify.com/s/files/1/0095/4332/files/hkgroteskpro-bold-webfont_e9ecfb71-62a3-4a4d-9d3f-03f4cf822b9b.woff2?v=1665039068') format('woff2');
+}
+@media (max-width:767px){
+  html, body, .canvas{ font-size: 4.266vw !important}
+  .container-pf{width: 100%;}
+  .fs-1 {font-size: 2.5rem !important; line-height: 3rem !important;}
+  .fs-2 {font-size: 2rem !important; line-height: 2.5rem !important;}
+  .fs-3 {font-size: 1.5rem !important; line-height: 2rem !important;}
+  .fs-4 {font-size: 1.25rem !important; line-height: 1.88rem !important;}
+  .fs-5 {font-size: 1.25rem !important; line-height: 1.88rem !important;}
+  .fs-6 {font-size: 1rem !important; line-height: 1.5rem !important;}
+  .fs-7{font-size: 0.88rem !important; line-height: 1.19rem !important;}
+  .fs-8{font-size: 0.75rem !important; line-height: 1rem !important;}
+  .fs-9{font-size: 0.63rem !important; line-height: 1rem !important;}
+  .fs-10{font-size: 0.8rem !important; line-height: 0.75rem !important;}
+  .fs-19{font-size: 0.75rem !important; line-height: 1rem !important;}
+  .display-1{font-size: 4.69rem !important; line-height: 5.63rem !important;}
+  .display-2{font-size: 4.44rem !important; line-height: 5.31rem !important;}
+  .display-3{font-size: 3.5rem !important; line-height: 4rem !important;}
+  .display-4{font-size: 3.81rem !important; line-height: 4.56rem !important;}
+  .display-5{font-size: 3.5rem !important; line-height: 4rem !important;}
+  .display-6{font-size: 3.06rem !important; line-height: 3.63rem !important;}
+} 
+   
+</style>
