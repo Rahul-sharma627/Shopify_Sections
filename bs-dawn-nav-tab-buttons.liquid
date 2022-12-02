@@ -1,0 +1,472 @@
+<style>
+    #{{ section.settings.uuid }}{ 
+        {% if section.settings.section-bg != blank %}
+            background-image:url({{ section.settings.section-bg | img_url:'master'}});
+        {% endif %}
+        background-size: {{ section.settings.section-bg-size }};
+        background-color: {{ section.settings.section-bg-color }};
+        background-position: {{ section.settings.bg-position }};
+        background-repeat: {{ section.settings.bg-repeat }};
+        min-height: {{section.settings.section-min-height }};
+    }
+    .section{padding:{{section.settings.custom-padding}};}
+    {% if section.settings.show_left_fade == true %}
+    #{{ section.settings.uuid }}:before{
+        content:'';
+        Display:block;
+        background: linear-gradient(90deg, {{section.settings.fade_color-left}} 0%, rgba(0,0,0,0) {{section.settings.left_fade_percentage}});
+        height:100%;
+        width:100%;
+        position:absolute;
+        top:0;
+        left:0;
+    }
+    {% endif %}
+    
+    {% if section.settings.show_right_fade == true %}
+    #{{ section.settings.uuid }}:after{
+        content:'';
+        Display:block;
+        background: linear-gradient(270deg, {{section.settings.fade_color-right}} 0%, rgba(0,0,0,0) {{section.settings.right_fade_percentage}});
+        height:100%;
+        width:100%;
+        position:absolute;
+        top:0;
+        left:0;
+    }
+    {% endif %}
+  
+    .gradient-bg{background: linear-gradient({{block.settings.color-position}}270deg, {{section.settings.fade_color-right}} 0%, rgba(0,0,0,0) {{section.settings.right_fade_percentage}});}
+    @media (max-width:767px){
+        #{{ section.settings.uuid }}{ 
+        {% if section.settings.section-mobile-bg != blank %}
+            background-image:url({{ section.settings.section-mobile-bg | img_url:'master'}});
+        {% endif %}
+        background-size: {{ section.settings.section-mobile-bg-size }};
+        background-color: {{ section.settings.section-mobile-bg-color }};
+        background-position: {{ section.settings.mobile-bg-position }};
+        background-repeat: {{ section.settings.mobile-bg-repeat }};
+        min-height: {{section.settings.section-mobile-min-height }};
+    }
+    }
+    </style>
+  <div class="canvas">
+    {{section.settings.customHtmlStyles}}
+    <section id="{{ section.settings.uuid }}" class="section {{ section.settings.section-class }}">
+        <div class="{{ section.settings.container-class }} {{section.settings.spacing-container-class}}">
+            {% for block in section.blocks %}
+  
+              {% if block.type == 'startNav-tabButtons' %}
+              <style>
+                ul#{{block.settings.navtabUlid}}{
+                  width: fit-content;
+                  margin: 0 auto;
+                  border: {{block.settings.borderThickness}}rem solid {{block.settings.borderColor}};
+                  border-radius: {{block.settings.borderRadius}}rem;
+                }
+              </style>
+                <ul class="nav nav-tabs {{block.settings.navtabClass}}" id="{{block.settings.navtabUlid}}" role="tablist">
+              {% endif %}
+  
+              {% if block.type == 'nav-items' %}
+              <style>
+                button#{{block.settings.nav-itemBtnID}}
+                {
+                  border-radius: {{block.settings.innerborderRadius}} !important;
+                  border: 0 !important;
+                  border-right: {{block.settings.innerBorder}}rem solid {{block.settings.innerBorderColor}} !important;
+                  color: {{block.settings.textcolor}};
+                  background: {{block.settings.btnbgColor}};
+                }
+  
+                li.nav-item:last-child button#{{block.settings.nav-itemBtnID}}{
+                  border-right: 0 !important;
+                }
+  
+                button#{{block.settings.nav-itemBtnID}}:hover,button#{{block.settings.nav-itemBtnID}}.active{
+                    color: {{block.settings.texthovercolor}};
+                    background: {{block.settings.btnbghoverColor}};
+                    border-right: {{block.settings.innerBorder}}rem solid {{block.settings.innerBorderhoverColor}} !important;
+                }
+              </style>
+                <li class="nav-item {{block.settings.nav-itemClass}}" role="presentation">
+                    <button class="nav-link {{block.settings.nav-itemBtnClass}}" id="{{block.settings.nav-itemBtnID}}" data-bs-toggle="tab" data-bs-target="#{{block.settings.nav-itemBtnTarget}}"
+                        type="button" role="tab" aria-controls="{{block.settings.nav-itemBtnTarget}}" aria-selected="{{block.settings.ariaSelected}}">{{block.settings.nav-itemBtnText}}</button>
+                </li>
+              {% endif %}
+  
+              {% if block.type == 'endNavTab' %}
+                </ul>
+              {% endif %}
+            {% endfor %}
+        </div>
+    </section>
+  </div>
+  
+  {% schema %}
+  {
+    "name": "Bs Dawn Nav-Tab Buttons",
+    "settings": [{
+        "type": "text",
+        "id": "uuid",
+        "label": "Unique ID"
+      },
+      {
+        "type": "text",
+        "id": "section-class",
+        "label": "Addtion Section Class"
+      },
+      {
+        "type": "text",
+        "id": "section-min-height",
+        "label": "Section Min height"
+      },
+      {
+       "type": "color",
+       "id": "section-bg-color",
+       "label": "Section BG Color"
+     },
+     {
+       "type": "text",
+       "id": "spacing-container-class",
+       "label": "Container Custom Class"
+     },
+    
+     {
+       "type": "select",
+       "id": "container-class",
+       "label": "Container Class",
+       "options": [{
+           "value": "container-pf",
+           "label": "progressive"
+         },
+         {
+           "value": "container",
+           "label": "Responsive"
+         },
+         {
+           "value": "container-fluid",
+           "label": "Fluid"
+         }
+       ],
+       "default": "container-pf"
+     },
+      {
+        "type": "color",
+        "id": "fade_color-left",
+        "label": "Left Fade Color"
+      },
+      {
+        "id": "show_left_fade",
+        "type": "checkbox",
+        "label": "Show Left overlay",
+        "default": false
+      },
+      {
+        "id": "left_fade_percentage",
+        "type": "text",
+        "label": "Left Fade Percentage",
+        "default": "10%"
+      },
+    
+      {
+        "type": "color",
+        "id": "fade_color-right",
+        "label": "Right Fade Color"
+      },
+      {
+        "id": "show_right_fade",
+        "type": "checkbox",
+        "label": "Show Right overlay",
+        "default": false
+      },
+      {
+        "id": "right_fade_percentage",
+        "type": "text",
+        "label": "Right Fade Percentage",
+        "default": "90%"
+      },
+      {
+        "type": "image_picker",
+        "id": "section-bg",
+        "label": "Section Background image"
+      },
+      {
+        "type": "text",
+        "id": "section-bg-size",
+        "label": "Background Size"
+      },
+      {
+        "type": "select",
+        "id": "bg-position",
+        "label": "Section Background Position",
+        "options": [{
+            "value": "center top",
+            "label": "Center Top"
+          },
+          {
+            "value": "center center",
+            "label": "Center"
+          },
+          {
+            "value": "center bottom",
+            "label": "Center Bottom"
+          },
+          {
+            "value": "top left",
+            "label": "Top Left"
+          },
+          {
+            "value": "top right",
+            "label": "Top Right"
+          },
+          {
+            "value": "bottom left",
+            "label": "Bottom Left"
+          },
+          {
+            "value": "bottom right",
+            "label": "Bototm Right"
+          },
+          {
+            "value": "bottom center",
+            "label": "Bottom Center"
+          }
+        ],
+        "default": "center center"
+      },
+      {
+        "type": "select",
+        "id": "bg-repeat",
+        "label": "Background Repeat",
+        "options": [{
+            "value": "no-repeat",
+            "label": "No Repeat"
+          },
+          {
+            "value": "repeat",
+            "label": "Repeat"
+          },
+          {
+            "value": "repeat-x",
+            "label": "Repeat X"
+          },
+          {
+            "value": "repeat-y",
+            "label": "Repeat Y"
+          }
+        ],
+        "default": "no-repeat"
+      },
+      {
+        "type": "image_picker",
+        "id": "section-mobile-bg",
+        "label": "Section Mobile Background image"
+      },
+      {
+        "type": "text",
+        "id": "section-mobile-bg-size",
+        "label": "Background Size"
+      },
+      {
+        "type": "select",
+        "id": "mobile-bg-position",
+        "label": "Mobile Section Background Position",
+        "options": [{
+            "value": "center top",
+            "label": "Center Top"
+          },
+          {
+            "value": "center center",
+            "label": "Center"
+          },
+          {
+            "value": "center bottom",
+            "label": "Center Bottom"
+          },
+          {
+            "value": "top left",
+            "label": "Top Left"
+          },
+          {
+            "value": "top right",
+            "label": "Top Right"
+          },
+          {
+            "value": "bottom left",
+            "label": "Bottom Left"
+          },
+          {
+            "value": "bottom right",
+            "label": "Bototm Right"
+          },
+          {
+            "value": "bottom center",
+            "label": "Bottom Center"
+          }
+        ],
+        "default": "center center"
+      },
+      {
+        "type": "select",
+        "id": "mobile-bg-repeat",
+        "label": "Mobile Background Repeat",
+        "options": [{
+            "value": "no-repeat",
+            "label": "No Repeat"
+          },
+          {
+            "value": "repeat",
+            "label": "Repeat"
+          },
+          {
+            "value": "repeat-x",
+            "label": "Repeat X"
+          },
+          {
+            "value": "repeat-y",
+            "label": "Repeat Y"
+          }
+        ],
+        "default": "no-repeat"
+      },
+      {
+       "type": "html",
+       "id": "customHtmlStyles",
+       "label": "Custom Html"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "startNav-tabButtons",
+        "name": "Start <ul>",
+        "settings": [
+          {
+            "type": "text",
+            "id": "navtabUlid",
+            "label": "Unique ID"
+          },
+          {
+            "type": "text",
+            "id": "navtabClass",
+            "label": "Extra Class"
+          },
+          {
+            "type": "text",
+            "id": "borderThickness",
+            "label": "Outer Border Thickness in (rem)"
+          },
+          {
+            "type": "color",
+            "id": "borderColor",
+            "label": "Outer Border Color"
+          },
+          {
+            "type": "text",
+            "id": "borderRadius",
+            "label": "Border radius in (rem)"
+          }
+        ]
+      },
+      {
+        "type": "nav-items",
+        "name": "Nav Item Buttons",
+        "settings": [
+          {
+            "type": "text",
+            "id": "nav-itemClass",
+            "label": "Nav Item (li) Class"
+          },
+          {
+            "type": "text",
+            "id": "nav-itemBtnClass",
+            "label": "Button Class"
+          },
+          {
+            "type": "text",
+            "id": "nav-itemBtnText",
+            "label": "Button Text"
+          },
+          {
+            "type": "color_background",
+            "id": "textcolor",
+            "label": "Buton Text Color"
+          },
+          {
+            "type": "color_background",
+            "id": "btnbgColor",
+            "label": "Button Background Color"
+          },
+          {
+            "type": "color_background",
+            "id": "innerBorderColor",
+            "label": "Inner border Color"
+          },
+          {
+            "type": "text",
+            "id": "innerBorder",
+            "label": "Inner Border Thickness in (rem)"
+          },
+          {
+            "type": "text",
+            "id": "innerborderRadius",
+            "label": "Button Border Radius"
+          },
+          {
+            "type": "text",
+            "id": "nav-itemBtnID",
+            "label": "Button ID"
+          },
+          {
+            "type": "text",
+            "id": "nav-itemBtnTarget",
+            "label": "Button Target"
+          },
+          {
+            "type": "select",
+            "id": "ariaSelected",
+            "label": "Button Aria Selected",
+            "options": [
+                {
+                    "value": "true",
+                    "label" :"True"
+                },
+                {
+                    "value": "false",
+                    "label": "False"
+                }
+            ],
+            "default": "false"
+          },
+          {
+            "type": "checkbox",
+            "id": "bnthoveractive",
+            "label": "Enable hover"
+          },
+          {
+            "type": "color_background",
+            "id": "texthovercolor",
+            "label": "Button Hover Text color"
+          },
+          {
+            "type": "color_background",
+            "id": "btnbghoverColor",
+            "label": "Button background Hover Color"
+          },
+          {
+            "type": "color_background",
+            "id": "innerBorderhoverColor",
+            "label": "Inner Border Hover Color"
+          }
+        ]
+      },
+      {
+        "type": "endNavTab",
+        "name": "End </ul>"
+      }
+    ],
+    "presets": [{
+    "name": "Bs Dawn Nav-Tab Buttons"
+    }] 
+  }
+  {% endschema %}
