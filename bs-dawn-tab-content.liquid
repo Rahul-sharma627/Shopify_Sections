@@ -1,0 +1,1133 @@
+<style>
+    #{{ section.settings.uuid }}{ 
+        {% if section.settings.section-bg != blank %}
+            background-image:url({{ section.settings.section-bg | img_url:'master'}});
+        {% endif %}
+        background-size: {{ section.settings.section-bg-size }};
+        background-color: {{ section.settings.section-bg-color }};
+        background-position: {{ section.settings.bg-position }};
+        background-repeat: {{ section.settings.bg-repeat }};
+        min-height: {{section.settings.section-min-height }};
+    }
+    .section{padding:{{section.settings.custom-padding}};}
+    {% if section.settings.show_left_fade == true %}
+    #{{ section.settings.uuid }}:before{
+        content:'';
+        Display:block;
+        background: linear-gradient(90deg, {{section.settings.fade_color-left}} 0%, rgba(0,0,0,0) {{section.settings.left_fade_percentage}});
+        height:100%;
+        width:100%;
+        position:absolute;
+        top:0;
+        left:0;
+    }
+    {% endif %}
+    
+    {% if section.settings.show_right_fade == true %}
+    #{{ section.settings.uuid }}:after{
+        content:'';
+        Display:block;
+        background: linear-gradient(270deg, {{section.settings.fade_color-right}} 0%, rgba(0,0,0,0) {{section.settings.right_fade_percentage}});
+        height:100%;
+        width:100%;
+        position:absolute;
+        top:0;
+        left:0;
+    }
+    {% endif %}
+  
+    .gradient-bg{background: linear-gradient({{block.settings.color-position}}270deg, {{section.settings.fade_color-right}} 0%, rgba(0,0,0,0) {{section.settings.right_fade_percentage}});}
+    @media (max-width:767px){
+        #{{ section.settings.uuid }}{ 
+        {% if section.settings.section-mobile-bg != blank %}
+            background-image:url({{ section.settings.section-mobile-bg | img_url:'master'}});
+        {% endif %}
+        background-size: {{ section.settings.section-mobile-bg-size }};
+        background-color: {{ section.settings.section-mobile-bg-color }};
+        background-position: {{ section.settings.mobile-bg-position }};
+        background-repeat: {{ section.settings.mobile-bg-repeat }};
+        min-height: {{section.settings.section-mobile-min-height }};
+    }
+    }
+    </style>
+<div class="canvas">
+    {{section.settings.customHtmlStyles}}
+    <section id="{{ section.settings.uuid }}" class="section {{ section.settings.section-class }}">
+        <div class="{{ section.settings.container-class }} {{section.settings.spacing-container-class}}">
+            <div class="tab-content" id="myTabContent">
+            {% for block in section.blocks %}
+              {% if block.type == 'tab-contentStart' %}
+                <div class="tab-pane fade {{block.settings.tabpaneClass}}" id="{{block.settings.tabpaneID}}" role="tabpanel" aria-labelledby="{{block.settings.tabpaneArialabelled}}" tabindex="0">
+                <div class="row {{block.settings.colclass}}">
+              {% endif %}
+              
+              {% if block.type == 'col-start' %}
+                <div class="{{block.settings.col-class}} {{block.settings.responsiveClass}}" style="order: {{block.settings.colOrder}}">
+              {% endif %}
+                        
+              {% if block.type == 'html' %}
+                {% if block.settings.line-1-size == "fs-7" and block.settings.col-line-1 != blank %}
+                    <small class="fs-7 line-1 {{ block.settings.col-line-1-classes }} {{ block.settings.space-class }} {{ block.settings.add-class }} {{ block.settings.responsiveClass }}" style="color:{{ block.settings.line-1-color }}" >{{ block.settings.col-line-1 }}</small>
+                {% endif %}
+                {% if block.settings.line-1-size != "fs-7" and block.settings.col-line-1 != blank %}
+                    <{{block.settings.line-1-size}} class="line-1 {{ block.settings.col-line-1-classes }} {{ block.settings.add-class }} {{ block.settings.responsiveClass }}" style="color:{{ block.settings.line-1-color }}" >{{ block.settings.col-line-1 }}</{{block.settings.line-1-size}}>
+                {% endif %}
+                {% if block.settings.btn-txt != blank %}
+                    <a class="btn {{ block.settings.btn-class}} {{ block.settings.responsiveClass }}">{{ block.settings.btn-txt }}</a>
+                {% endif %}
+              {% endif %}
+
+              {% if block.type == 'imageBlock' and block.settings.imageUrl != blank %}
+                <style>
+                    #{{ section.settings.uuid }} #{{block.settings.img-unique}}{
+                        width: {{block.settings.imgWidth}}em;
+                    }
+                    @media (max-width: 767px){
+                       #{{ section.settings.uuid }} #{{block.settings.img-unique}}{
+                        width: {{block.settings.mobimgWidth}}em;
+                    } 
+                    }
+                </style>
+                    <img id="{{block.settings.img-unique}}" src="{{block.settings.imageUrl | img_url: 'master' }}" class="img-fluid {{block.settings.imageClass}} {{block.settings.responsiveClass}} d-none d-md-block">
+                    <img id="{{block.settings.img-unique}}" src="{{block.settings.mobimageUrl | img_url: 'master' }}" class="img-fluid {{block.settings.imageClass}} {{block.settings.responsiveClass}} d-block d-md-none">
+                {% endif %}
+  
+                {% if block.type == 'imageBlock' and block.settings.imageUrlLink != blank %}
+                <style>
+                    #{{ section.settings.uuid }} #{{block.settings.img-unique}}{
+                        width: {{block.settings.imgWidth}}em;
+                    }
+                    @media (max-width: 767px){
+                        #{{ section.settings.uuid }} #{{block.settings.img-unique}}{
+                        width: {{block.settings.mobimgWidth}}em;
+                    } 
+                    }
+                </style>
+                  <img id="{{block.settings.img-unique}}" src="{{ block.settings.imageUrlLink }}" class="img-fluid {{block.settings.imageClass}} {{block.settings.responsiveClass}} d-none d-md-block">
+                  <img id="{{block.settings.img-unique}}" src="{{ block.settings.mobimageUrlLink }}" class="img-fluid {{block.settings.imageClass}} {{block.settings.responsiveClass}} d-block d-md-none">
+                {% endif %}
+
+                {% if block.type == 'card' %}
+                <div class="card {{block.settings.cardClass}} {{block.settings.card-color}} {{ block.settings.responsiveClass }}">                    
+                {% endif %}
+  
+                {% if block.type == 'cardBody' %}
+                   <div class="card-body {{block.settings.cardBodyClass}}">
+                {% endif %}
+  
+                {% if block.type == 'cardBodyEnd' %}
+                 </div>
+                {% endif %}
+  
+                {% if block.type == 'card-end' %}
+                </div>
+                {% endif %}
+
+                {% if block.type == 'btn' %}
+                   {% if block.settings.btn-link != blank and block.settings.modalTarget == blank %}
+                    <a href="{{block.settings.btn-link}}" class="btn {{block.settings.btn-color}} {{block.settings.btn-size}} {{block.settings.btn-class}} {{block.settings.responsiveClass}}" data-bs-toggle="modal" data-bs-target="#{{ block.settings.modalTarget }}"> {{block.settings.btn-text}}</a>
+                    {% endif %}
+                    {% if block.settings.modalTarget != blank and block.settings.btn-link == blank %}
+                     <a class="btn {{block.settings.btn-color}} {{block.settings.btn-size}} {{block.settings.btn-class}} {{block.settings.responsiveClass}}" data-bs-toggle="modal" data-bs-target="#{{ block.settings.modalTarget }}"> {{block.settings.btn-text}}</a>
+                    {% endif %}
+                {% endif %}
+
+              {% if block.type == "list-col-start" %}
+                <ul class="{{ block.settings.ul-class}} {{ block.settings.responsiveClass }}">
+              {% endif %}
+              {% if block.type == "list-col" %}
+                <li class="{{ block.settings.li-class }} {{block.settings.responsiveClass }}">{{block.settings.list}}</li>
+              {% endif %}
+              {% if block.type == "list-col-end" %}
+                </ul>   
+              {% endif %}
+
+              {% if block.type == 'col-end' %}
+                </div>
+              {% endif %}
+
+              {% if block.type == 'tab-contentEnd' %}
+                </div>
+                </div>
+              {% endif %}     
+              
+              {% if block.type == 'customMarkup' %}
+                {{block.settings.customhtmlBlock}}
+              {% endif %}
+
+            {% endfor %}
+            </div>
+        </div>
+    </section>
+</div>
+
+{% schema %}
+{
+    "name": "Bs Dawn Nav-Tab Content",
+    "settings": [{
+        "type": "text",
+        "id": "uuid",
+        "label": "Unique ID"
+      },
+      {
+        "type": "text",
+        "id": "section-class",
+        "label": "Addtion Section Class"
+      },
+      {
+        "type": "text",
+        "id": "section-min-height",
+        "label": "Section Min height"
+      },
+      {
+       "type": "color",
+       "id": "section-bg-color",
+       "label": "Section BG Color"
+     },
+     {
+       "type": "text",
+       "id": "spacing-container-class",
+       "label": "Container Custom Class"
+     },
+    
+     {
+       "type": "select",
+       "id": "container-class",
+       "label": "Container Class",
+       "options": [{
+           "value": "container-pf",
+           "label": "progressive"
+         },
+         {
+           "value": "container",
+           "label": "Responsive"
+         },
+         {
+           "value": "container-fluid",
+           "label": "Fluid"
+         }
+       ],
+       "default": "container-pf"
+     },
+      {
+        "type": "color",
+        "id": "fade_color-left",
+        "label": "Left Fade Color"
+      },
+      {
+        "id": "show_left_fade",
+        "type": "checkbox",
+        "label": "Show Left overlay",
+        "default": false
+      },
+      {
+        "id": "left_fade_percentage",
+        "type": "text",
+        "label": "Left Fade Percentage",
+        "default": "10%"
+      },
+    
+      {
+        "type": "color",
+        "id": "fade_color-right",
+        "label": "Right Fade Color"
+      },
+      {
+        "id": "show_right_fade",
+        "type": "checkbox",
+        "label": "Show Right overlay",
+        "default": false
+      },
+      {
+        "id": "right_fade_percentage",
+        "type": "text",
+        "label": "Right Fade Percentage",
+        "default": "90%"
+      },
+      {
+        "type": "image_picker",
+        "id": "section-bg",
+        "label": "Section Background image"
+      },
+      {
+        "type": "text",
+        "id": "section-bg-size",
+        "label": "Background Size"
+      },
+      {
+        "type": "select",
+        "id": "bg-position",
+        "label": "Section Background Position",
+        "options": [{
+            "value": "center top",
+            "label": "Center Top"
+          },
+          {
+            "value": "center center",
+            "label": "Center"
+          },
+          {
+            "value": "center bottom",
+            "label": "Center Bottom"
+          },
+          {
+            "value": "top left",
+            "label": "Top Left"
+          },
+          {
+            "value": "top right",
+            "label": "Top Right"
+          },
+          {
+            "value": "bottom left",
+            "label": "Bottom Left"
+          },
+          {
+            "value": "bottom right",
+            "label": "Bototm Right"
+          },
+          {
+            "value": "bottom center",
+            "label": "Bottom Center"
+          }
+        ],
+        "default": "center center"
+      },
+      {
+        "type": "select",
+        "id": "bg-repeat",
+        "label": "Background Repeat",
+        "options": [{
+            "value": "no-repeat",
+            "label": "No Repeat"
+          },
+          {
+            "value": "repeat",
+            "label": "Repeat"
+          },
+          {
+            "value": "repeat-x",
+            "label": "Repeat X"
+          },
+          {
+            "value": "repeat-y",
+            "label": "Repeat Y"
+          }
+        ],
+        "default": "no-repeat"
+      },
+      {
+        "type": "image_picker",
+        "id": "section-mobile-bg",
+        "label": "Section Mobile Background image"
+      },
+      {
+        "type": "text",
+        "id": "section-mobile-bg-size",
+        "label": "Background Size"
+      },
+      {
+        "type": "select",
+        "id": "mobile-bg-position",
+        "label": "Mobile Section Background Position",
+        "options": [{
+            "value": "center top",
+            "label": "Center Top"
+          },
+          {
+            "value": "center center",
+            "label": "Center"
+          },
+          {
+            "value": "center bottom",
+            "label": "Center Bottom"
+          },
+          {
+            "value": "top left",
+            "label": "Top Left"
+          },
+          {
+            "value": "top right",
+            "label": "Top Right"
+          },
+          {
+            "value": "bottom left",
+            "label": "Bottom Left"
+          },
+          {
+            "value": "bottom right",
+            "label": "Bototm Right"
+          },
+          {
+            "value": "bottom center",
+            "label": "Bottom Center"
+          }
+        ],
+        "default": "center center"
+      },
+      {
+        "type": "select",
+        "id": "mobile-bg-repeat",
+        "label": "Mobile Background Repeat",
+        "options": [{
+            "value": "no-repeat",
+            "label": "No Repeat"
+          },
+          {
+            "value": "repeat",
+            "label": "Repeat"
+          },
+          {
+            "value": "repeat-x",
+            "label": "Repeat X"
+          },
+          {
+            "value": "repeat-y",
+            "label": "Repeat Y"
+          }
+        ],
+        "default": "no-repeat"
+      },
+      {
+       "type": "html",
+       "id": "customHtmlStyles",
+       "label": "Custom Html"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "tab-contentStart",
+        "name": "Start Tab Content",
+        "settings": [
+           {
+            "type" : "text",
+            "id": "tabpaneID",
+            "label": "Tab Pane ID"
+           },
+           {
+            "type" : "text",
+            "id": "tabpaneClass",
+            "label": "Tab Pane Class"
+           },
+           {
+            "type": "text",
+            "id": "tabpaneArialabelled",
+            "label": "Tab Panel aria-labelledby"
+           },
+           {
+            "type": "text",
+            "id": "colclass",
+            "label": "Row extra Class"
+           }
+        ]
+      },
+      {
+        "type": "tab-contentEnd",
+        "name": "End tab Content"
+      },
+      {
+        "type": "col-start",
+        "name": "Start Column",
+        "settings": [{
+          "type": "text",
+          "id": "col-class",
+          "label": "Col Class"
+        },
+        {
+         "type": "number",
+         "id": "colOrder",
+         "label": "Column Order"
+        },
+        {
+         "id": "responsiveClass",
+         "type": "select",
+         "label": "Display",
+         "options": [
+             {
+               "value": "d-none",
+               "label": "Always Hide (d-none)"
+             },
+             {
+               "value": "d-block",
+               "label": "Always Show (d-block)"
+             },
+             {
+               "value": "d-none d-md-block",
+               "label": "Desktop (d-none d-md-block)"
+             },
+             {
+               "value": "d-none d-md-flex",
+               "label": "Flex For Desktop (d-none d-md-flex)"
+             },
+             {
+               "value": "d-none d-md-inline-block",
+               "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
+             },
+             {
+               "value": "d-block d-md-none",
+               "label": "Only Mobile (d-block d-md-none)"
+             },
+             {
+               "value": "d-flex d-md-none",
+               "label": "Flex For Mobile (d-flex d-md-none)"
+             },
+             {
+               "value": "d-inline-block d-md-none",
+               "label": "Inline Block For Mobile (d-inline-block d-md-none)"
+             },
+             {
+               "value": "None",
+               "label": "None"
+             }
+           ],
+           "default": "None"
+       }
+        ]
+      },
+      {
+        "type": "col-end",
+        "name": "End Column",
+        "settings": [{
+          "type": "color",
+          "id": "col-end-color",
+          "label": "Bg Color"
+        }]
+      },
+      {
+        "type": "html",
+        "name": "Text",
+        "settings": [
+          {
+            "type": "liquid",
+            "id": "col-line-1",
+            "label": "Liquid / HTML / Text"
+          },
+          {
+            "type": "select",
+            "id": "line-1-size",
+            "label": "Text Size Tag",
+            "options": [{
+                "value": "H1",
+                "label": "h1 (56)"
+              },
+              {
+                "value": "H2",
+                "label": "h2 (49)"
+              },
+              {
+                "value": "H3",
+                "label": "h3 (41)"
+              },
+              {
+                "value": "H4",
+                "label": "h4 (34)"
+              },
+              {
+                "value": "H5",
+                "label": "h5 (24)"
+              },
+              {
+                "value": "H6",
+                "label": "h6 (20)"
+              },
+              {
+                "value": "P",
+                "label": "p (20)"
+              },
+              {
+                "value": "fs-7",
+                "label": "Small Text (16)"
+              }
+            ],
+            "default": "P"
+          },
+          {
+            "type": "select",
+            "id": "col-line-1-classes",
+            "label": "Font Size Classes",
+            "options": [{
+                "value": "display-1",
+                "label": "display-1 (94px)"
+              },
+              {
+                "value": "display-2",
+                "label": "display-2 (89px)"
+              },
+              {
+                "value": "display-3",
+                "label": "display-3 (83px)"
+              },
+              {
+                "value": "display-4",
+                "label": "display-4 (77px)"
+              },
+              {
+                "value": "display-5",
+                "label": "display-5 (71px)"
+              },
+              {
+                "value": "display-6",
+                "label": "display-6 (65px)"
+              },
+              {
+               "value": "fs-1",
+               "label": "fs-1 (59px)"
+             },
+             {
+               "value": "fs-2",
+               "label": "fs-2 (49px)"
+             },
+             {
+               "value": "fs-3",
+               "label": "fs-3 (41px)"
+             },
+             {
+               "value": "fs-4",
+               "label": "fs-4 (34px)"
+             },
+             {
+               "value": "fs-5",
+               "label": "fs-5 (24px)"
+             },
+             {
+               "value": "fs-6",
+               "label": "fs-6 (20px)"
+             },
+             {
+               "value": "fs-7",
+               "label": "fs-7 (16px)"
+             },
+             {
+               "value": "fs-8",
+               "label": "fs-8 (13px)"
+             },
+             {
+               "value": "fs-9",
+               "label": "fs-9 (10px)"
+             },
+             {
+               "value": "fs-10",
+               "label": "fs-10 (8px)"
+             },
+              {
+                "value": "none",
+                "label": "None"
+              }
+            ],
+            "default": "none"
+          },
+          {
+            "type": "text",
+            "id": "add-class",
+            "label": "Add Class"
+          },
+          {
+            "type": "color",
+            "id": "line-1-color",
+            "label": "Text Color"
+          },
+          {
+           "id": "responsiveClass",
+           "type": "select",
+           "label": "Display Class",
+           "options": [
+             {
+               "value": "d-none",
+               "label": "Always Hide (d-none)"
+             },
+             {
+               "value": "d-block",
+               "label": "Always Show (d-block)"
+             },
+             {
+               "value": "d-none d-md-block",
+               "label": "Desktop (d-none d-md-block)"
+             },
+             {
+               "value": "d-none d-md-flex",
+               "label": "Flex For Desktop (d-none d-md-flex)"
+             },
+             {
+               "value": "d-none d-md-inline-block",
+               "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
+             },
+             {
+               "value": "d-block d-md-none",
+               "label": "Only Mobile (d-block d-md-none)"
+             },
+             {
+               "value": "d-flex d-md-none",
+               "label": "Flex For Mobile (d-flex d-md-none)"
+             },
+             {
+               "value": "d-inline-block d-md-none",
+               "label": "Inline Block For Mobile (d-inline-block d-md-none)"
+             },
+             {
+               "value": "None",
+               "label": "None"
+             }
+           ],
+           "default": "None"    
+         }
+        ]
+      },
+      {
+        "type": "imageBlock",
+        "name": "Image Block",
+        "settings": [
+          {
+            "type": "text",
+            "id": "img-unique",
+            "label": "Add this field with unique text for image width"
+          },
+          {
+            "id": "imageUrl",
+            "label": "Select Image",
+            "type": "image_picker"
+          },
+          {
+            "id": "imageUrlLink",
+            "type": "url",
+            "label": "Image Url Link"
+          },
+          {
+            "id": "imageClass",
+            "type": "text",
+            "label": "Image Class"
+          },
+          {
+             "id": "imgWidth",
+             "type": "text",
+             "label": "Image width in (em)"
+           },
+           {
+            "id": "mobimageUrl",
+            "label": "Select Mobile Image",
+            "type": "image_picker"
+          },
+          {
+            "id": "mobimageUrlLink",
+            "type": "url",
+            "label": "Mobile Image Url Link"
+          },
+          {
+             "id": "mobimgWidth",
+             "type": "text",
+             "label": "Mobile Image width in (em)"
+           },
+           {
+             "id": "responsiveClass",
+             "type": "select",
+             "label": "Display",
+             "options": [
+             {
+               "value": "d-none",
+               "label": "Always Hide (d-none)"
+             },
+             {
+               "value": "d-block",
+               "label": "Always Show (d-block)"
+             },
+             {
+               "value": "d-none d-md-block",
+               "label": "Desktop (d-none d-md-block)"
+             },
+             {
+               "value": "d-none d-md-flex",
+               "label": "Flex For Desktop (d-none d-md-flex)"
+             },
+             {
+               "value": "d-none d-md-inline-block",
+               "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
+             },
+             {
+               "value": "d-block d-md-none",
+               "label": "Only Mobile (d-block d-md-none)"
+             },
+             {
+               "value": "d-flex d-md-none",
+               "label": "Flex For Mobile (d-flex d-md-none)"
+             },
+             {
+               "value": "d-inline-block d-md-none",
+               "label": "Inline Block For Mobile (d-inline-block d-md-none)"
+             },
+             {
+               "value": "None",
+               "label": "None"
+             }
+           ],
+           "default": "None"
+           }
+        ]
+      },
+      {
+            "type": "card",
+            "name": "Start Card",
+            "settings": [{
+                "type": "text",
+                "id": "cardClass",
+                "label": "Card Class"
+              },
+              {
+                "type": "select",
+                "id": "card-color",
+                "label": "Card Color",
+                "options": [{
+                    "value": "text-bg-primary",
+                    "label": "Primary (BS Blue)"
+                  },
+                  {
+                    "value": "text-bg-secondary",
+                    "label": "Secondary (BS Gray)"
+                  },
+                  {
+                    "value": "text-bg-success",
+                    "label": "Success (BS Green)"
+                  },
+                  {
+                    "value": "text-bg-danger",
+                    "label": "Danger (BS Red)"
+                  },
+                  {
+                    "value": "text-bg-warning",
+                    "label": "Warning (BS Yellow)"
+                  },
+                  {
+                    "value": "text-bg-info",
+                    "label": "Warning (BS Yellow)"
+                  },
+                  {
+                    "value": "text-bg-light",
+                    "label": "Light (BS Light Gray)"
+                  },
+                  {
+                    "value": "text-bg-dark",
+                    "label": "Dark (BS Dark Gray)"
+                  },
+                  {
+                    "value": " ",
+                    "label": "None"
+                  }
+                ],
+                "default": " "
+              },
+             {
+               "id": "responsiveClass",
+               "type": "select",
+               "label": "Display",
+               "options": [
+                 {
+                   "value": "d-none",
+                   "label": "Always Hide (d-none)"
+                 },
+                 {
+                   "value": "d-block",
+                   "label": "Always Show (d-block)"
+                 },
+                 {
+                   "value": "d-none d-md-block",
+                   "label": "Desktop (d-none d-md-block)"
+                 },
+                 {
+                   "value": "d-none d-md-flex",
+                   "label": "Flex For Desktop (d-none d-md-flex)"
+                 },
+                 {
+                   "value": "d-none d-md-inline-block",
+                   "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
+                 },
+                 {
+                   "value": "d-block d-md-none",
+                   "label": "Only Mobile (d-block d-md-none)"
+                 },
+                 {
+                   "value": "d-flex d-md-none",
+                   "label": "Flex For Mobile (d-flex d-md-none)"
+                 },
+                 {
+                   "value": "d-inline-block d-md-none",
+                   "label": "Inline Block For Mobile (d-inline-block d-md-none)"
+                 },
+                 {
+                   "value": "None",
+                   "label": "None"
+                 }
+               ],
+               "default": "None"
+             }
+            ]
+        },
+        {
+          "type": "cardBody",
+          "name": "Start Card Body",
+          "settings": [{
+            "type": "text",
+            "id": "cardBodyClass",
+            "label": "Card Body Class"
+          }]
+        },
+        {
+          "type": "cardBodyEnd",
+          "name": "End Card Body"
+        },
+        {
+          "type": "card-end",
+          "name": "End Card"
+        },
+        {
+            "type": "btn",
+            "name": "Button",
+            "settings": [{
+                "type": "text",
+                "id": "btn-text",
+                "label": "Button Text"
+              },
+              {
+                "type": "text",
+                "id": "btn-class",
+                "label": "Button Class"
+              },
+              {
+               "id": "responsiveClass",
+               "type": "select",
+               "label": "Display",
+               "options": [
+                 {
+                   "value": "d-none",
+                   "label": "Always Hide (d-none)"
+                 },
+                 {
+                   "value": "d-block",
+                   "label": "Always Show (d-block)"
+                 },
+                 {
+                   "value": "d-none d-md-block",
+                   "label": "Desktop (d-none d-md-block)"
+                 },
+                 {
+                   "value": "d-none d-md-flex",
+                   "label": "Flex For Desktop (d-none d-md-flex)"
+                 },
+                 {
+                   "value": "d-none d-md-inline-block",
+                   "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
+                 },
+                 {
+                   "value": "d-block d-md-none",
+                   "label": "Only Mobile (d-block d-md-none)"
+                 },
+                 {
+                   "value": "d-flex d-md-none",
+                   "label": "Flex For Mobile (d-flex d-md-none)"
+                 },
+                 {
+                   "value": "d-inline-block d-md-none",
+                   "label": "Inline Block For Mobile (d-inline-block d-md-none)"
+                 },
+                 {
+                   "value": "None",
+                   "label": "None"
+                 }
+               ],
+               "default": "None"
+             },
+              {
+                "type": "select",
+                "id": "btn-size",
+                "label": "Button Size",
+                "options": [{
+                    "value": "btn-lg",
+                    "label": "Large button"
+                  },
+                  {
+                    "value": "btn-sm",
+                    "label": "Small button"
+                  },
+                  {
+                    "value": " ",
+                    "label": "Default"
+                  }
+                ],
+                "default": " "
+              },
+              {
+                "type": "select",
+                "id": "btn-color",
+                "label": "Button Theme",
+                "options": [{
+                    "value": "btn-sm-primary",
+                    "label": "SmallHD Yellow"
+                  },
+                  {
+                    "value": "btn-td-primary",
+                    "label": "Teradek Orange"
+                  },
+                  {
+                    "value": "btn-wc-primary",
+                    "label": "Wooden Camera Blue"
+                  },
+                  {
+                    "value": "btn-outline-sm-primary",
+                    "label": "SmallHD Outline Yellow"
+                  },
+                  {
+                    "value": "btn-outline-td-primary",
+                    "label": "Teradek Outline Orange"
+                  },
+                  {
+                    "value": "btn-outline-wc-primary",
+                    "label": "Wooden Camera Outlne Blue"
+                  }
+                ],
+                "default": "btn-td-primary"
+              },
+              {
+                "type": "url",
+                "id": "btn-link",
+                "label": "Button Link"
+              },
+              {
+                "type": "text",
+                "id": "modalTarget",
+                "label": "Add same Id which you used in Modal"
+              }
+            ]
+        },
+        {
+           "type": "list-col-start",
+           "name": "Start UL tag",
+           "settings":[
+             {
+               "type": "text",
+               "id": "ul-class",
+               "label": "Ul Class" 
+             },
+             {
+               "id": "responsiveClass",
+               "type": "select",
+               "label": "Display",
+               "options": [
+                 {
+                   "value": "d-none",
+                   "label": "Always Hide (d-none)"
+                 },
+                 {
+                   "value": "d-block",
+                   "label": "Always Show (d-block)"
+                 },
+                 {
+                   "value": "d-none d-md-block",
+                   "label": "Desktop (d-none d-md-block)"
+                 },
+                 {
+                   "value": "d-none d-md-flex",
+                   "label": "Flex For Desktop (d-none d-md-flex)"
+                 },
+                 {
+                   "value": "d-none d-md-inline-block",
+                   "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
+                 },
+                 {
+                   "value": "d-block d-md-none",
+                   "label": "Only Mobile (d-block d-md-none)"
+                 },
+                 {
+                   "value": "d-flex d-md-none",
+                   "label": "Flex For Mobile (d-flex d-md-none)"
+                 },
+                 {
+                   "value": "d-inline-block d-md-none",
+                   "label": "Inline Block For Mobile (d-inline-block d-md-none)"
+                 },
+                 {
+                   "value": "None",
+                   "label": "None"
+                 }
+               ],
+               "default": "None"
+             }
+           ]
+          },
+          {
+           "type": "list-col",
+           "name": "List col",
+           "settings": [
+             {
+               "type": "text",
+               "id": "li-class",
+               "label": "Li class" 
+             },
+             {
+               "type": "html",
+               "id": "list",
+               "label": "Li Content"
+             },
+             {
+               "id": "responsiveClass",
+               "type": "select",
+               "label": "Display",
+               "options": [
+                 {
+                   "value": "d-none",
+                   "label": "Always Hide (d-none)"
+                 },
+                 {
+                   "value": "d-block",
+                   "label": "Always Show (d-block)"
+                 },
+                 {
+                   "value": "d-none d-md-block",
+                   "label": "Desktop (d-none d-md-block)"
+                 },
+                 {
+                   "value": "d-none d-md-flex",
+                   "label": "Flex For Desktop (d-none d-md-flex)"
+                 },
+                 {
+                   "value": "d-none d-md-inline-block",
+                   "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
+                 },
+                 {
+                   "value": "d-block d-md-none",
+                   "label": "Only Mobile (d-block d-md-none)"
+                 },
+                 {
+                   "value": "d-flex d-md-none",
+                   "label": "Flex For Mobile (d-flex d-md-none)"
+                 },
+                 {
+                   "value": "d-inline-block d-md-none",
+                   "label": "Inline Block For Mobile (d-inline-block d-md-none)"
+                 },
+                 {
+                   "value": "None",
+                   "label": "None"
+                 }
+               ],
+               "default": "None"
+             }
+           ]
+          },
+          {
+             "type": "list-col-end",
+             "name": "End UL Tag"        
+          },
+          {
+            "type": "customMarkup",
+            "name": "Custom Markup",
+            "settings": [
+                {
+                    "type": "liquid",
+                    "id": "customhtmlBlock",
+                    "label": "Custom Markup"
+                }
+            ]
+          }
+    ],
+    "presets": [{
+    "name": "Bs Dawn Nav-Tab Content"
+    }] 
+}
+{% endschema %}
