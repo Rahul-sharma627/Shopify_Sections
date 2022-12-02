@@ -1,0 +1,248 @@
+{% stylesheet %}
+.secondary-nav {
+    top: 4.5rem !important;
+  }
+ 
+  @media (max-width: 767px){
+    .secondary-nav{
+    top: 4rem !important;
+    }
+  }
+{% endstylesheet %}
+
+<script>
+  document.addEventListener("DOMContentLoaded", function(event) {
+  var element = document.getElementById("fixedNavMobile");
+  function resize() {
+    if (window.innerWidth < 767) {
+      element.classList.add('dropdown-menu');
+    } else {
+      element.classList.remove('dropdown-menu');
+    }
+  }
+  window.onresize = resize;
+  window.onload = resize;
+  setInterval(resize,10);
+});
+</script>
+
+<div class="canvas">
+    <section id="{{section.settings.uuid}}" class="secondary-nav fixed-top px-md-15 px-4 {{section.settings.className}}" style="background-color: {{section.settings.bgColor}};">
+        <div class="d-flex align-items-center">
+            {% for block in section.blocks %}
+
+                {% if block.type == 'mobActiveLink' %}
+                    <a class="nav-link text-white border-0 dropdown-toggle d-block d-md-none {{block.settings.mobileActive}}" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false" id="nav-drop">
+                    {{block.settings.navText}}
+                    </a>
+                {% endif %}
+
+                {% if block.type == 'list' %}
+                <style>
+                    .dropdown-menu.show{
+                        background-color: {{block.settings.bgColor}};
+                    }
+                </style>
+                    <ul id="fixedNavMobile" class="d-md-flex align-items-center list-unstyled mb-0 {{block.settings.navstartClass}}" aria-labelledby="nav-drop">
+                {% endif %}
+                
+                {% if block.type == 'Nav-link' %}
+                    <style>
+                        .nav-link-border::after {
+                          content: '';
+                          height: 70%;
+                          display: inline-block;
+                          width: 0.05em;
+                          border-radius: 0;
+                          position: absolute;
+                          top: 0.35rem;
+                          margin-left: 0.9rem;
+                          background: {{block.settings.navBorderColor}};
+                       }
+                       .nav-item:last-child .nav-link-border::after{
+                          width: 0 !important;
+                       }
+                       .active{
+                        color: #fff !important;
+                       }
+                       .bord:hover{
+                        border-bottom: 1px solid #939598;
+                       }
+                       @media (max-width: 767px){
+                        .nav-link-border::after{
+                            display: none;
+                        }
+                        .active{
+                            color: {{block.settings.navTextColor}} !important;
+                        }
+                       }
+                    </style>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-border p-2 ps-6 {{block.settings.navlinkClass}}" href="{{block.settings.navUrl}}" style="color: {{block.settings.navTextColor}};">
+                        <span class="bord">{{block.settings.navText}}</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+
+            {% if block.type == 'endlist' %}   
+            </ul>
+            {% endif %}
+            
+            {% if block.type == 'endbutton' %}
+                <a class="btn py-0 ms-auto my-2 d-inline-flex align-items-center {{block.settings.btnClass}} {{block.settings.btnType}}" href="{{block.settings.btnUrl}}">{{block.settings.btnText}}
+                </a>
+            {% endif %}
+
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% schema %}
+{
+    "name": "Fixed Navbar",
+    "settings": [
+      {
+        "type": "text",
+        "id": "uuid",
+        "label": "Unique ID"
+      },
+      {
+        "type": "text",
+        "id": "className",
+        "label": "Section Class"
+      },
+      {
+        "type": "color",
+        "id": "bgColor",
+        "label": "Background color"
+      }
+    ],
+    "blocks": [
+        {
+            "type": "Nav-link",
+            "name": "Nav Link",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "navText",
+                    "label": "Nav Link Text"
+                },
+                {
+                    "type": "text",
+                    "id": "navlinkClass",
+                    "label": "Class"
+                },
+                {
+                    "type": "color",
+                    "id": "navTextColor",
+                    "label": "Nav Text Color"
+                },
+                {
+                    "type": "color",
+                    "id": "navBorderColor",
+                    "label": "Nav Border Color"
+                },
+                {
+                    "type": "url",
+                    "id": "navUrl",
+                    "label": "Nav URL"
+                }
+            ]
+        },
+        {
+            "type": "mobActiveLink",
+            "name": "Mobile Active Link",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "mobileActive",
+                    "label": "Mobile Active Button Class"
+                },
+                {
+                    "type": "text",
+                    "id": "navText",
+                    "label": "Mobile Active Nav Text"
+                }
+            ]
+        },
+        {
+            "type": "list",
+            "name": "Start Nav",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "navstartClass",
+                    "label": "Class"
+                },
+                {
+                    "type": "color",
+                    "id": "bgColor",
+                    "label": "Mobile dropdown background Color"
+                }
+            ]
+        },
+        {
+            "type": "endlist",
+            "name": "End Nav"
+        },
+        {
+            "type": "endbutton",
+            "name": "Right button",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "btnText",
+                    "label": "Text"
+                },
+                {
+                    "type": "select",
+                    "id": "btnType",
+                    "label": "Select Button Type",
+                    "options": [
+                        {
+                            "value": "btn-sm-primary",
+                            "label": "SmallHD Yellow"
+                        },
+                        {
+                            "value": "btn-td-primary",
+                            "label": "Teradek Orange"
+                        },
+                        {
+                          "value": "btn-wc-primary",
+                          "label": "Wooden Camera Blue"
+                        },
+                        {
+                          "value": "btn-outline-sm-primary",
+                          "label": "SmallHD Outline Yellow"
+                        },
+                        {
+                          "value": "btn-outline-td-primary",
+                          "label": "Teradek Outline Orange"
+                        },
+                        {
+                          "value": "btn-outline-wc-primary",
+                          "label": "Wooden Camera Outlne Blue"
+                        }
+                    ],
+                    "default": "btn-outline-td-primary"
+                },
+                {
+                    "type": "text",
+                    "id": "btnClass",
+                    "label": "Class"
+                },
+                {
+                    "type": "url",
+                    "id": "btnUrl",
+                    "label": "Url"
+                }
+            ]
+        }
+    ],
+    "presets": [{
+        "name": "Fixed Navbar"
+    }]
+}
+{% endschema %}
