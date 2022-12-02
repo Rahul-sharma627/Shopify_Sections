@@ -1,0 +1,91 @@
+{%include "article-bs5-css"%}
+
+
+<style>
+  body{font-family: "HKGP"; font-weight: 400;}
+  @font-face {
+  font-family: 'HKGP300';
+  font-weight: 300;
+  src: url({{ 'HKGroteskPro-Light.woff2' | asset_url}}) format('woff2'),
+       url({{ 'HKGroteskPro-Light.woff' | asset_url}}) format('woff');
+}
+
+@font-face {
+  font-family: 'HKGP400';
+  font-weight: 400;
+  
+  src: url({{ 'HKGroteskPro-Regular.woff2' | asset_url}}) format('woff2'),
+       url({{ 'HKGroteskPro-Regular.woff' | asset_url}}) format('woff');
+  
+}  
+  
+@font-face {
+  font-family: 'HKGP500';
+  font-weight: 500;
+  src: url({{ 'HKGroteskPro-Medium.woff2' | asset_url}}) format('woff2'),
+       url({{ 'HKGroteskPro-Medium.woff' | asset_url}}) format('woff');
+}
+
+@font-face {
+  font-family: 'HKGP700';
+  font-weight: 700;
+  src: url({{ 'HKGroteskPro-Bold.woff2' | asset_url}}) format('woff2'),
+       url({{ 'HKGroteskPro-Bold.woff' | asset_url}}) format('woff');
+}
+
+  /*Site Main Override*/
+  .site-main {
+    background-color:{{section.settings.outer_bg_color}};
+    max-width:{{section.settings.inner_max_width}};
+  }
+
+  #PageContainer {
+    background-color:{{section.settings.outer_bg_color}};
+  }
+
+@media (max-width: 767px){
+  h1, .h1{font-size: 2.5rem; line-height: 3rem;}
+  .fs-12, .fs-19{font-size: 0.75rem; line-height: 1rem;}
+    p, .fs-7{font-size: 1rem; line-height: 1.5rem;}
+}
+
+
+
+
+</style>
+{{ section.settings.customMarkup }}
+<div id="main--inner">
+
+
+</div>
+
+{% schema %}
+  {
+    "name": "LP BS5",
+    "settings": [
+
+  		{
+  			"id": "outer_bg_color",
+  			"type": "color",
+  			"label": "Outer Bg Color"
+  		},
+      {
+        "type": "html",
+        "id": "customMarkup",
+        "label": "Custom styles"
+      }
+]
+,
+
+  	"presets": [{
+  		"name": "LP BS5"
+  	}]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
+
