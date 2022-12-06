@@ -1,0 +1,119 @@
+@mixin poly-fluid-sizing($property, $map)
+{
+  $length: length(map-keys($map));
+  @if ($length < 2)
+  {
+    @error "poly-fluid-sizing() $map requires at least values";
+  }
+  $map: map-sort($map);
+  $keys: map-keys($map);
+  #{$property}: map-get($map, nth($keys, 1));
+  @for $i from 1 through ($length - 1) {
+    @media (min-width: nth($keys, $i)) {
+      #{$property}: linear-interpolation((nth($keys, $i): map-get($map, nth($keys, $i)), nth($keys, ($i + 1)): map-get($map, nth($keys, ($i + 1)))));
+    }
+  }
+  @media (min-width: nth($keys, $length)) {
+    #{$property}: map-get($map, nth($keys, $length));
+  }
+}
+@function linear-interpolation($map) {
+  $keys: map-keys($map);
+  @if (length($keys) != 2) {
+    @error "Incorrect length";
+  }
+  $m: (map-get($map, nth($keys, 2)) - map-get($map, nth($keys, 1))) / (nth($keys, 2) - nth($keys, 1));
+  $b: map-get($map, nth($keys, 1)) - $m * nth($keys, 1);
+  $sign: "+";
+  @if ($b < 0) {
+    $sign: "-";
+    $b: abs($b);
+  }
+  @return calc(#{$m * 100}vw #{$sign} #{$b});
+}
+@function list-sort($list) {
+  $sortedlist: ();
+  @while length($list) > 0 {
+    $value: nth($list, 1);
+    @each $item in $list {
+      @if $item < $value {
+        $value: $item;
+      }
+    }
+    $sortedlist: append($sortedlist, $value, "space");
+    $list: list-remove($list, index($list, $value));
+  }
+  @return $sortedlist;
+}
+@function map-sort($map) {
+  $keys: list-sort(map-keys($map));
+  $sorted-map: ();
+  @each $key in $keys {
+    $sorted-map: map-merge($sorted-map, ($key: map-get($map, $key)));
+  }
+  @return $sorted-map;
+}
+@function list-remove($list, $index) {
+  $newlist: ();
+  @for $i from 1 through length($list) {
+    @if $i != $index {
+      $newlist: append($newlist, nth($list, $i), "space");
+    }
+  }
+  @return $newlist;
+}
+$grid-gutter-width:           1.5rem !default;
+$container-padding-x: $grid-gutter-width !default;
+
+@mixin container-pf($padding-x: $container-padding-x) {
+  padding-right: $padding-x;
+  padding-left: $padding-x;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+
+.container-pf {
+  @include container-pf();
+  $width: (
+    768px: 768px,
+    1024px: 1024px,
+    1460px: 1082px,
+    1920px: 1440px,
+    2560px: 1792px,
+    3840px: 2227px,
+    5120px: 2483px,
+    6144px: 2562px,
+    7680px: 2596px
+  );
+  @include poly-fluid-sizing("width", $width);
+}
+.canvas {
+  $fontsize: (
+    768px: 14px,
+    1024px: 19px,
+    1460px: 20px,
+    1920px: 27px,
+    2560px: 33px,
+    3840px: 41px,
+    5120px: 46px,
+    6144px: 47px,
+    7680px: 48px
+  );
+  @include poly-fluid-sizing("font-size", $fontsize);
+}
+body,
+html {
+  $fontsize: (
+    768px: 16px,
+    1024px: 19px,
+    1460px: 20px,
+    1920px: 27px,
+    2560px: 33px,
+    3840px: 41px,
+    5120px: 46px,
+    6144px: 47px,
+    7680px: 48px
+  );
+  @include poly-fluid-sizing("font-size", $fontsize);
+}
