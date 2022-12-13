@@ -1,911 +1,1033 @@
 <style>
 
-    #{{ section.settings.uuid }}{ 
-        {% if section.settings.section-bg != blank %}
-            background-image:url({{ section.settings.section-bg | img_url:'master'}});
-        {% endif %}
-        background-size: {{ section.settings.section-bg-size }};
-        background-color: {{ section.settings.section-bg-color }};
-        background-position: {{ section.settings.bg-position }};
-        background-repeat: {{ section.settings.bg-repeat }};
-        min-height: {{section.settings.section-min-height }};
-        overflow-x: hidden;
-    }
-    .section{padding:{{section.settings.custom-padding}};}
-    {% if section.settings.show_left_fade == true %}
-    #{{ section.settings.uuid }} .{{ section.settings.container-class }}:before{
-        content:'';
-        Display:block;
-        background: linear-gradient(90deg, {{section.settings.fade_color-left}} 0%, rgba(0,0,0,0) {{section.settings.left_fade_percentage}});
-        height:100%;
-        width:100%;
-        position:absolute;
-        top:0;
-        left:-17.4%;
-    }
-    {% endif %}
-    
-    {% if section.settings.show_right_fade == true %}
-    #{{ section.settings.uuid }} .{{ section.settings.container-class }}:after{
-        content:''; 
-        Display:block;
-        background: linear-gradient(270deg, {{section.settings.fade_color-right}} 0%, rgba(0,0,0,0) {{section.settings.right_fade_percentage}});
-        height:100%;
-        width:100%;
-        position:absolute;
-        top:0;
-        right:-17.4%;
-    }
-    {% endif %}
-  
-    .gradient-bg{background: linear-gradient({{block.settings.color-position}}270deg, {{section.settings.fade_color-right}} 0%, rgba(0,0,0,0) {{section.settings.right_fade_percentage}});}
-    @media (max-width:767px){
-        #{{ section.settings.uuid }}{ 
-        {% if section.settings.section-mobile-bg != blank %}
-            background-image:url({{ section.settings.section-mobile-bg | img_url:'master'}});
-        {% endif %}
-        background-size: {{ section.settings.section-mobile-bg-size }};
-        background-color: {{ section.settings.section-mobile-bg-color }};
-        background-position: {{ section.settings.mobile-bg-position }};
-        background-repeat: {{ section.settings.mobile-bg-repeat }};
-        min-height: {{section.settings.section-mobile-min-height }};
-    }
-    </style>
-    {{section.settings.customHtmlStyles}}
-    <div class="canvas">
-    <section id="{{ section.settings.uuid }}" class="section {{ section.settings.section-class }}">    
-        <div class="{{ section.settings.container-class }} {{section.settings.spacing-container-class}}">
-            {% for block in section.blocks %}        
-                {% if block.type == 'rowstart' %}
-                    <div class="row {{block.settings.row-class}} {{block.settings.responsiveClass}}">
-                {% endif %}
-  
-                {% if block.type == 'col-start' %}
-                    <div class="{{block.settings.col-class}} {{block.settings.responsiveClass}}" style="order: {{block.settings.colOrder}}">
-                {% endif %}
-  
-                {% if block.type == 'html' %}
-                {% if block.settings.line-1-size == "fs-7" and block.settings.col-line-1 != blank %}
-                    <small class="fs-7 line-1 {{ block.settings.col-line-1-classes }} {{ block.settings.space-class }} {{ block.settings.add-class }} {{ block.settings.responsiveClass }} d-none d-md-block" style="color:{{ block.settings.line-1-color }}" >{{ block.settings.col-line-1 }}</small>
-                    <small class="fs-7 line-1 {{ block.settings.col-line-2-classes }} {{ block.settings.space-class }} {{ block.settings.add-class }} {{ block.settings.responsiveClass }} d-block d-md-none" style="color:{{ block.settings.line-1-color }}; font-size: {{block.settings.customfontmobo}};" >{{ block.settings.col-line-1 }}</small>
-                {% endif %}
-                {% if block.settings.line-1-size != "fs-7" and block.settings.col-line-1 != blank %}
-                    <{{block.settings.line-1-size}} class="line-1 {{ block.settings.col-line-1-classes }} {{ block.settings.add-class }} {{ block.settings.responsiveClass }} d-none d-md-block" style="color:{{ block.settings.line-1-color }}" >{{ block.settings.col-line-1 }}</{{block.settings.line-1-size}}>
-                    <{{block.settings.line-1-size}} class="line-1 {{ block.settings.col-line-2-classes }} {{ block.settings.add-class }} {{ block.settings.responsiveClass }} d-block d-md-none" style="color:{{ block.settings.line-1-color }}; font-size: {{block.settings.customfontmobo}};">{{ block.settings.col-line-1 }}</{{block.settings.line-1-size}}>
-                {% endif %}
-                {% if block.settings.btn-txt != blank %}
-                    <a class="btn {{ block.settings.btn-class}} {{ block.settings.responsiveClass }}">{{ block.settings.btn-txt }}</a>
-                {% endif %}
-                {% endif %}
-  
-                {% if block.type == 'card' %}
-                <div class="card {{block.settings.cardClass}} {{block.settings.card-color}} {{ block.settings.responsiveClass }}" style="background:{{block.settings.cardBG}};">
-                {% endif %}
-  
-                {% if block.type == 'cardBody' %}
-                   <div class="card-body {{block.settings.cardBodyClass}}">
-                {% endif %}
-  
-                {% if block.type == 'cardBodyEnd' %}
-                 </div>
-                {% endif %}
-  
-                {% if block.type == 'card-end' %}
-                </div>
-                {% endif %}
-  
-                {% if block.type == 'col-end' %}
-                    </div> 
-                {% endif %}
-  
-                {% if block.type == 'rowend' %}
-                    </div> 
-                {% endif %}
-                {% if block.type == 'imageBlock' and block.settings.imageUrl != blank %}
-                <style>
-                    #{{ section.settings.uuid }} #{{block.settings.img-unique}}{
-                        width: {{block.settings.imgWidth}}em;
-                    }
-                    @media (max-width: 767px){
-                       #{{ section.settings.uuid }} #{{block.settings.img-unique}}{
-                        width: {{block.settings.mobimgWidth}}em;
-                    } 
-                    }
-                </style>
-                    <img id="{{block.settings.img-unique}}" src="{{block.settings.imageUrl | img_url: 'master' }}" class="img-fluid {{block.settings.imageClass}} {{block.settings.responsiveClass}} d-none d-md-block">
-                    {% if block.settings.mobimageUrl != blank %}
-                    <img id="{{block.settings.img-unique}}" src="{{block.settings.mobimageUrl | img_url: 'master' }}" class="img-fluid {{block.settings.imageClass}} {{block.settings.responsiveClass}} d-block d-md-none">
-                    {% endif %}
-                {% endif %}
-  
-                {% if block.type == 'imageBlock' and block.settings.imageUrlLink != blank %}
-                <style>
-                    #{{ section.settings.uuid }} #{{block.settings.img-unique}}{
-                        width: {{block.settings.imgWidth}}em;
-                    }
-                    @media (max-width: 767px){
-                        #{{ section.settings.uuid }} #{{block.settings.img-unique}}{
-                        width: {{block.settings.mobimgWidth}}em;
-                    } 
-                    }
-                </style>
-                  <img id="{{block.settings.img-unique}}" src="{{ block.settings.imageUrlLink }}" class="img-fluid {{block.settings.imageClass}} {{block.settings.responsiveClass}} d-none d-md-block">
-                  {% if block.settings.mobimageUrlLink != blank %}
-                  <img id="{{block.settings.img-unique}}" src="{{ block.settings.mobimageUrlLink }}" class="img-fluid {{block.settings.imageClass}} {{block.settings.responsiveClass}} d-block d-md-none">
+  #{{ section.settings.uuid }}{
+      {% if section.settings.section-bg != blank %}
+          background-image:url({{ section.settings.section-bg | img_url:'master'}});
+      {% endif %}
+      background-size: {{ section.settings.section-bg-size }};
+      background-color: {{ section.settings.section-bg-color }};
+      background-position: {{ section.settings.bg-position }};
+      background-repeat: {{ section.settings.bg-repeat }};
+      min-height: {{section.settings.section-min-height }};
+      overflow-x: hidden;
+  }
+  .section{padding:{{section.settings.custom-padding}};}
+  {% if section.settings.show_left_fade == true %}
+  #{{ section.settings.uuid }} .{{ section.settings.container-class }}:before{
+      content:'';
+      Display:block;
+      background: linear-gradient(90deg, {{section.settings.fade_color-left}} 0%, rgba(0,0,0,0) {{section.settings.left_fade_percentage}});
+      height:100%;
+      width:100%;
+      position:absolute;
+      top:0;
+      left:-17.4%;
+  }
+  {% endif %}
+
+  {% if section.settings.show_right_fade == true %}
+  #{{ section.settings.uuid }} .{{ section.settings.container-class }}:after{
+      content:'';
+      Display:block;
+      background: linear-gradient(270deg, {{section.settings.fade_color-right}} 0%, rgba(0,0,0,0) {{section.settings.right_fade_percentage}});
+      height:100%;
+      width:100%;
+      position:absolute;
+      top:0;
+      right:-17.4%;
+  }
+  {% endif %}
+
+  .gradient-bg{background: linear-gradient({{block.settings.color-position}}270deg, {{section.settings.fade_color-right}} 0%, rgba(0,0,0,0) {{section.settings.right_fade_percentage}});}
+  @media (max-width:767px){
+      #{{ section.settings.uuid }}{
+      {% if section.settings.section-mobile-bg != blank %}
+          background-image:url({{ section.settings.section-mobile-bg | img_url:'master'}});
+      {% endif %}
+      background-size: {{ section.settings.section-mobile-bg-size }};
+      background-color: {{ section.settings.section-mobile-bg-color }};
+      background-position: {{ section.settings.mobile-bg-position }};
+      background-repeat: {{ section.settings.mobile-bg-repeat }};
+      min-height: {{section.settings.section-mobile-min-height }};
+  }
+  </style>
+  {{section.settings.customHtmlStyles}}
+  <div class="canvas">
+  <section id="{{ section.settings.uuid }}" class="section {{ section.settings.section-class }}">
+      <div class="{{ section.settings.container-class }} {{section.settings.spacing-container-class}}">
+          {% for block in section.blocks %}
+              {% if block.type == 'rowstart' %}
+                  <div class="row {{block.settings.row-class}} {{block.settings.responsiveClass}}">
+              {% endif %}
+
+              {% if block.type == 'col-start' %}
+                  <div class="{{block.settings.col-class}} {{block.settings.responsiveClass}}" style="order: {{block.settings.colOrder}}">
+              {% endif %}
+
+              {% if block.type == 'html' %}
+              {% if block.settings.line-1-size == "fs-7" and block.settings.col-line-1 != blank %}
+                  <small class="fs-7 line-1 {{ block.settings.col-line-1-classes }} {{ block.settings.space-class }} {{ block.settings.add-class }} {{ block.settings.responsiveClass }} d-none d-md-block" style="color:{{ block.settings.line-1-color }}" >{{ block.settings.col-line-1 }}</small>
+                  <small class="fs-7 line-1 {{ block.settings.col-line-2-classes }} {{ block.settings.space-class }} {{ block.settings.add-class }} {{ block.settings.responsiveClass }} d-block d-md-none" style="color:{{ block.settings.line-1-color }}; font-size: {{block.settings.customfontmobo}};" >{{ block.settings.col-line-1 }}</small>
+              {% endif %}
+              {% if block.settings.line-1-size != "fs-7" and block.settings.col-line-1 != blank %}
+                  <{{block.settings.line-1-size}} class="line-1 {{ block.settings.col-line-1-classes }} {{ block.settings.add-class }} {{ block.settings.responsiveClass }} d-none d-md-block" style="color:{{ block.settings.line-1-color }}" >{{ block.settings.col-line-1 }}</{{block.settings.line-1-size}}>
+                  <{{block.settings.line-1-size}} class="line-1 {{ block.settings.col-line-2-classes }} {{ block.settings.add-class }} {{ block.settings.responsiveClass }} d-block d-md-none" style="color:{{ block.settings.line-1-color }}; font-size: {{block.settings.customfontmobo}};">{{ block.settings.col-line-1 }}</{{block.settings.line-1-size}}>
+              {% endif %}
+              {% if block.settings.btn-txt != blank %}
+                  <a class="btn {{ block.settings.btn-class}} {{ block.settings.responsiveClass }}">{{ block.settings.btn-txt }}</a>
+              {% endif %}
+              {% endif %}
+
+              {% if block.type == 'card' %}
+              <div class="card {{block.settings.cardClass}} {{block.settings.card-color}} {{ block.settings.responsiveClass }}" style="background:{{block.settings.cardBG}};">
+              {% endif %}
+
+              {% if block.type == 'cardBody' %}
+                 <div class="card-body {{block.settings.cardBodyClass}}">
+              {% endif %}
+
+              {% if block.type == 'cardBodyEnd' %}
+               </div>
+              {% endif %}
+
+              {% if block.type == 'card-end' %}
+              </div>
+              {% endif %}
+
+              {% if block.type == 'col-end' %}
+                  </div>
+              {% endif %}
+
+              {% if block.type == 'rowend' %}
+                  </div>
+              {% endif %}
+              {% if block.type == 'imageBlock' and block.settings.imageUrl != blank %}
+              <style>
+                  #{{ section.settings.uuid }} #{{block.settings.img-unique}}{
+                      width: {{block.settings.imgWidth}}em;
+                  }
+                  @media (max-width: 767px){
+                     #{{ section.settings.uuid }} #{{block.settings.img-unique}}{
+                      width: {{block.settings.mobimgWidth}}em;
+                  }
+                  }
+              </style>
+                  <img id="{{block.settings.img-unique}}" src="{{block.settings.imageUrl | img_url: 'master' }}" class="img-fluid {{block.settings.imageClass}} {{block.settings.responsiveClass}} d-none d-md-block">
+                  {% if block.settings.mobimageUrl != blank %}
+                  <img id="{{block.settings.img-unique}}" src="{{block.settings.mobimageUrl | img_url: 'master' }}" class="img-fluid {{block.settings.imageClass}} {{block.settings.responsiveClass}} d-block d-md-none">
                   {% endif %}
+              {% endif %}
+
+              {% if block.type == 'imageBlock' and block.settings.imageUrlLink != blank %}
+              <style>
+                  #{{ section.settings.uuid }} #{{block.settings.img-unique}}{
+                      width: {{block.settings.imgWidth}}em;
+                  }
+                  @media (max-width: 767px){
+                      #{{ section.settings.uuid }} #{{block.settings.img-unique}}{
+                      width: {{block.settings.mobimgWidth}}em;
+                  }
+                  }
+              </style>
+                <img id="{{block.settings.img-unique}}" src="{{ block.settings.imageUrlLink }}" class="img-fluid {{block.settings.imageClass}} {{block.settings.responsiveClass}} d-none d-md-block">
+                {% if block.settings.mobimageUrlLink != blank %}
+                <img id="{{block.settings.img-unique}}" src="{{ block.settings.mobimageUrlLink }}" class="img-fluid {{block.settings.imageClass}} {{block.settings.responsiveClass}} d-block d-md-none">
                 {% endif %}
-                      
-                {% if block.type == 'btn' %}
-                   {% if block.settings.btn-link != blank and block.settings.modalTarget == blank %}
-                    <a href="{{block.settings.btn-link}}" class="btn {{block.settings.btn-color}} {{block.settings.btn-size}} {{block.settings.btn-class}} {{block.settings.responsiveClass}}" data-bs-toggle="modal" data-bs-target="#{{ block.settings.modalTarget }}"> {{block.settings.btn-text}}</a>
-                    {% endif %}
-                    {% if block.settings.modalTarget != blank and block.settings.btn-link == blank %}
-                     <a class="btn {{block.settings.btn-color}} {{block.settings.btn-size}} {{block.settings.btn-class}} {{block.settings.responsiveClass}}" data-bs-toggle="modal" data-bs-target="#{{ block.settings.modalTarget }}"> {{block.settings.btn-text}}</a>
-                    {% endif %}
-                {% endif %}
-  
-                {% if block.type == 'customHtml' %}
-                    {{block.settings.customHtml}}
-                {% endif %}
-  
-                {% if block.type == 'modal' %}
-                    <div class="modal fade contact {{block.settings.responsiveClass}}" id="{{ block.settings.modalId }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-modal="true" role="dialog">                    
-                    {% if block.settings.contactModal == true and block.settings.videoModal != true %}
-                      <div class="modal-dialog  {{ block.settings.modalSize}} modal-dialog-scrollable modal-dialog-centered">
-                          <div class="modal-content">
-                              <div class="modal-header">              
-                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                              </div>
-                              <div class="modal-body">
-                                  <iframe class="{{block.settings.iframeClass}}" style="height:{{block.settings.iframeHeight}}" src="{{block.settings.iframeUrl}}" title="Iframe Example"></iframe>
-                              </div>  
+              {% endif %}
+
+              {% if block.type == 'btn' %}
+                 {% if block.settings.btn-link != blank and block.settings.modalTarget == blank %}
+                  <a href="{{block.settings.btn-link}}" class="btn {{block.settings.btn-color}} {{block.settings.btn-size}} {{block.settings.btn-class}} {{block.settings.responsiveClass}}" data-bs-toggle="modal" data-bs-target="#{{ block.settings.modalTarget }}"> {{block.settings.btn-text}}</a>
+                  {% endif %}
+                  {% if block.settings.modalTarget != blank and block.settings.btn-link == blank %}
+                   <a class="btn {{block.settings.btn-color}} {{block.settings.btn-size}} {{block.settings.btn-class}} {{block.settings.responsiveClass}}" data-bs-toggle="modal" data-bs-target="#{{ block.settings.modalTarget }}"> {{block.settings.btn-text}}</a>
+                  {% endif %}
+              {% endif %}
+
+              {% if block.type == 'customHtml' %}
+                  {{block.settings.customHtml}}
+              {% endif %}
+              {% if block.type == 'customLiquid' %}
+                  {{block.settings.customLiquid}}
+              {% endif %}
+             {% if block.type == 'productForCarousel' %}
+
+                   {%assign product = block.settings.product_for_carousel%}
+                        {% for variant in product.variants %}
+                          {%if forloop.index==1 %}
+                              {% assign current_variant = variant %}
+                          {%endif%}
+                      {%endfor%}
+                        {% assign featured_image = block.settings.product_image | default: product.featured_image %}
+                        {% assign current_variant = product.selected_or_first_available_variant %}
+               {{ block.settings.custom_code }}
+              <div style="max-width:1400px;" class="{{ block.settings.product_classes }}">
+                     <a class="{{ block.settings.button_classes }}" href="{{ block.settings.button_url }}" target="_parent">
+                       <img class=" carousel-product-image {{ block.settings.product_image_classes }}" src="{{ featured_image | img_url: 'large' }}" alt="{{ featured_image.alt }}" />
+                          <h3 class="{{ block.settings.title_classes }}">{{ block.settings.title }}</h3>
+
+                      </a>
+
+                        <div class=" {{ block.settings.price_classes }}">
+                             {% if block.settings.product_price != blank %}
+                                  {{ block.settings.product_price }}
+                              {%  else %}
+                                  {{ current_variant.price | money_without_trailing_zeros }}
+                               {% endif %}
                           </div>
-                      </div>
-                    {% endif %}					
-          
-                    {% if block.settings.videoModal == true and block.settings.contactModal != true%}
-                      <div class="modal-dialog  {{ block.settings.modalSize}} modal-dialog-centered">
-                      <script src="https://player.vimeo.com/api/player.js"></script>
-                      <style>
-                          .btn-close {
-                              position: absolute;
-                              right: -1.8%;
-                              top: -5%;
-                              background: none;
-                              font-size: 1em;
-                              font-weight: 700;
-                              height: auto;
-                              width: auto;
-                              z-index: 1;
-                              color: #7B62F2;
-                              opacity: 1;
-                          }
-                      </style>
-                      <div class="modal-content video">
-                        <div class="modal-body p-0">
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
-                          <div class="ratio ratio-16x9">
-                            <iframe id="{{block.settings.video-id}}"  class="{{block.settings.iframeClass}}" src="{{block.settings.iframeUrl}}?controls={{block.settings.controls}}&amp;loop={{block.settings.loop}}&amp;autoplay={{block.settings.autoplay}}&amp;mute={{block.settings.mute}}" title="{{block.settings.video-title}}" id="video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="">
-                            </iframe>
-                          </div>
+
+                     </div>
+
+
+              {% endif %}
+
+              {% if block.type == 'modal' %}
+                  <div class="modal fade contact {{block.settings.responsiveClass}}" id="{{ block.settings.modalId }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-modal="true" role="dialog">
+                  {% if block.settings.contactModal == true and block.settings.videoModal != true %}
+                    <div class="modal-dialog  {{ block.settings.modalSize}} modal-dialog-scrollable modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <iframe class="{{block.settings.iframeClass}}" style="height:{{block.settings.iframeHeight}}" src="{{block.settings.iframeUrl}}" title="Iframe Example"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                  {% endif %}
+
+                  {% if block.settings.videoModal == true and block.settings.contactModal != true%}
+                    <div class="modal-dialog  {{ block.settings.modalSize}} modal-dialog-centered">
+                    <script src="https://player.vimeo.com/api/player.js"></script>
+                    <style>
+                        .btn-close {
+                            position: absolute;
+                            right: -1.8%;
+                            top: -5%;
+                            background: none;
+                            font-size: 1em;
+                            font-weight: 700;
+                            height: auto;
+                            width: auto;
+                            z-index: 1;
+                            color: #7B62F2;
+                            opacity: 1;
+                        }
+                    </style>
+                    <div class="modal-content video">
+                      <div class="modal-body p-0">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+                        <div class="ratio ratio-16x9">
+                          <iframe id="{{block.settings.video-id}}"  class="{{block.settings.iframeClass}}" src="{{block.settings.iframeUrl}}?controls={{block.settings.controls}}&amp;loop={{block.settings.loop}}&amp;autoplay={{block.settings.autoplay}}&amp;mute={{block.settings.mute}}" title="{{block.settings.video-title}}" id="video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="">
+                          </iframe>
                         </div>
                       </div>
                     </div>
-                    {% endif %}
                   </div>
-  
-  <script>	
-  $(document).ready(function(){
-      /* Get iframe src attribute value i.e. YouTube video url
-      and store it in a variable */
-      var url = $("#{{block.settings.video-id}}").attr('src');
-      
-      /* Remove iframe src attribute on page load to
-      prevent autoplay in background */
-      $("#{{block.settings.video-id}}").attr('src', '');
-      
-      /* Assign the initially stored url back to the iframe src
-      attribute when modal is displayed */
-      $("#{{ block.settings.modalId }}").on('shown.bs.modal', function(){
-          $("#{{block.settings.video-id}}").attr('src', url);
-      });
-      
-      /* Assign empty url value to the iframe src attribute when
-      modal hide, which stop the video playing */
-      $("#{{ block.settings.modalId }}").on('hide.bs.modal', function(){
-          $("#{{block.settings.video-id}}").attr('src', '');
-      });
-  });
-  </script>
-                {% endif %}  
-  
-        {% if block.type == 'video_overlay' %}
-          <style>
-          
-            #{{ block.settings.uuid }} .loop-video-section{
-              width: 100%;
-              margin: 0 auto;
-            }
-            #{{ block.settings.uuid }} .video-overlay-bg {
-              width:{{block.settings.bg_image_width}};
-              margin: 0 auto;
-            }
-  
-            #{{ block.settings.uuid }} .overlay-inner {
-              top: {{block.settings.video_top | default:"0vw"}};
-              left: {{block.settings.video_left | default:"0vw"}};
-              right: {{block.settings.video_right | default:"0vw"}};
-              bottom: {{block.settings.video_bottom | default:"0vw"}};
-              width: {{block.settings.video_width | default:"100%"}};
-            }
-            #{{ block.settings.uuid }} .videoWidth{width: {{block.settings.video-Width}};}
-  
-          @media (max-width:767px){  
-            #{{ block.settings.uuid }} .video-overlay-bg {
-              width: {{block.settings.bg_image_width_mobile}};
-              margin: 0 auto;
-            }
-            #{{ block.settings.uuid }} .overlay-inner {
-              top: {{block.settings.video_top_m | default:"0em"}};
-              left: {{block.settings.video_left_m | default:"0em"}};
-              right: {{block.settings.video_right_m | default:"0em"}};
-              bottom: {{block.settings.video_bottom_m | default:"0em"}};
-              /*width: {{block.settings.video_width_m | default:"100%"}};*/
-            }
-  
+                  {% endif %}
+                </div>
+
+<script>
+$(document).ready(function(){
+    /* Get iframe src attribute value i.e. YouTube video url
+    and store it in a variable */
+    var url = $("#{{block.settings.video-id}}").attr('src');
+
+    /* Remove iframe src attribute on page load to
+    prevent autoplay in background */
+    $("#{{block.settings.video-id}}").attr('src', '');
+
+    /* Assign the initially stored url back to the iframe src
+    attribute when modal is displayed */
+    $("#{{ block.settings.modalId }}").on('shown.bs.modal', function(){
+        $("#{{block.settings.video-id}}").attr('src', url);
+    });
+
+    /* Assign empty url value to the iframe src attribute when
+    modal hide, which stop the video playing */
+    $("#{{ block.settings.modalId }}").on('hide.bs.modal', function(){
+        $("#{{block.settings.video-id}}").attr('src', '');
+    });
+});
+</script>
+              {% endif %}
+
+      {% if block.type == 'video_overlay' %}
+        <style>
+
+          #{{ block.settings.uuid }} .loop-video-section{
+            width: 100%;
+            margin: 0 auto;
           }
-          </style>
-          <div id="{{block.settings.uuid}}" class="position-relative loop-video-section">
-                  {% if block.settings.bg_image != blank %}
-            <img src="{{block.settings.bg_image | img_url:'master' }}" class="video-overlay-bg d-none d-md-block" alt="">
-                    {% endif %}
-                  {% if block.settings.bg_image_mobile != blank %}
-            <img src="{{block.settings.bg_image_mobile  | img_url:'master' }}" class="video-overlay-bg d-block d-md-none" alt="">
-                    {% endif %}
-            <div class="videoWidth overlay-inner position-absolute">
-              <div class="ratio ratio-16x9">
-                <iframe src="{{block.settings.video_url}}?controls={{block.settings.controls}}&autoplay={{block.settings.autoplay}}&mute={{block.settings.mute}}&loop={{block.settings.loop}}&h=3969001fdf&badge=0&autopause={{block.settings.autopause}}" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;" title="{{block.settings.video_title}}"></iframe>
-              </div>
+          #{{ block.settings.uuid }} .video-overlay-bg {
+            width:{{block.settings.bg_image_width}};
+            margin: 0 auto;
+          }
+
+          #{{ block.settings.uuid }} .overlay-inner {
+            top: {{block.settings.video_top | default:"0vw"}};
+            left: {{block.settings.video_left | default:"0vw"}};
+            right: {{block.settings.video_right | default:"0vw"}};
+            bottom: {{block.settings.video_bottom | default:"0vw"}};
+            width: {{block.settings.video_width | default:"100%"}};
+          }
+          #{{ block.settings.uuid }} .videoWidth{width: {{block.settings.video-Width}};}
+
+        @media (max-width:767px){
+          #{{ block.settings.uuid }} .video-overlay-bg {
+            width: {{block.settings.bg_image_width_mobile}};
+            margin: 0 auto;
+          }
+          #{{ block.settings.uuid }} .overlay-inner {
+            top: {{block.settings.video_top_m | default:"0em"}};
+            left: {{block.settings.video_left_m | default:"0em"}};
+            right: {{block.settings.video_right_m | default:"0em"}};
+            bottom: {{block.settings.video_bottom_m | default:"0em"}};
+            /*width: {{block.settings.video_width_m | default:"100%"}};*/
+          }
+
+        }
+        </style>
+        <div id="{{block.settings.uuid}}" class="position-relative loop-video-section">
+                {% if block.settings.bg_image != blank %}
+          <img src="{{block.settings.bg_image | img_url:'master' }}" class="video-overlay-bg d-none d-md-block" alt="">
+                  {% endif %}
+                {% if block.settings.bg_image_mobile != blank %}
+          <img src="{{block.settings.bg_image_mobile  | img_url:'master' }}" class="video-overlay-bg d-block d-md-none" alt="">
+                  {% endif %}
+          <div class="videoWidth overlay-inner position-absolute">
+            <div class="ratio ratio-16x9">
+              <iframe src="{{block.settings.video_url}}?controls={{block.settings.controls}}&autoplay={{block.settings.autoplay}}&mute={{block.settings.mute}}&loop={{block.settings.loop}}&h=3969001fdf&badge=0&autopause={{block.settings.autopause}}" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;" title="{{block.settings.video_title}}"></iframe>
             </div>
           </div>
-        {% endif %}
-  
-        {% if block.type == 'video_button' %}
-          <style>
-            .popup-video-btn:before {
-              position: absolute;
-              left: 0;
-              top: 50%;
-              transform: translateY(-50%);
-              line-height: 0;
-              content: url({{block.settings.video_button_graphic}});
-            }
-            .popup-video-btn:hover {
-              opacity:.7;
-            }
-  
-            .popup-video-btn {
-              position: relative;
-              display: flex;
-              padding-left: 2.5rem;
-              color:{{block.settings.video_button_text_color}};
-              background-color: {{block.settings.video_button_color}};
-              letter-spacing: 0.1em;
-              font-weight: 600;
-            }                  
-          </style>
-          <a class="popup-video-btn {{block.settings.video_button_classes}} {{block.settings.responsiveClass}}" data-bs-toggle="modal" data-bs-target="#{{block.settings.video_button_target}}">{{block.settings.video_button_text}}</a>
-        {% endif %}
-  
-        {% if block.type == 'video_static' %}
-          <style>
-          
-            .video-image-box {
-              height: 0;
-              overflow: hidden;
-              padding-top: min(calc(9/16 * 100%));
-              background: url('{{block.settings.video_img_off | img_url:'master'}}') no-repeat ;
-              background-size:contain;
-              position: relative;
-              margin:0 auto;
-              display:block;
-              }
-  
-            .video-image-box:hover {
-                background-image: url({{block.settings.video_img_over | img_url:'master'}});
-              }      
-          </style>
-  
-          <a class="video-image-box popup-video {{block.settings.video_player_static_classes}} {{block.settings.responsiveClass}}" data-bs-target="#{{ block.settings.video_img_url }}" data-bs-toggle="modal"> </a>
-        {% endif %}
-  
-        {% if block.type == 'numpositionBlock' %}
+        </div>
+      {% endif %}
+
+      {% if block.type == 'video_button' %}
         <style>
-            .{{ block.settings.positionClasses}}{
-                left: {{block.settings.leftPosition}};
-                top: {{block.settings.topPosition}};
-                bottom: {{block.settings.bottomPosition}};
-                right: {{block.settings.rightPosition}};
+          .popup-video-btn:before {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            line-height: 0;
+            content: url({{block.settings.video_button_graphic}});
+          }
+          .popup-video-btn:hover {
+            opacity:.7;
+          }
+
+          .popup-video-btn {
+            position: relative;
+            display: flex;
+            padding-left: 2.5rem;
+            color:{{block.settings.video_button_text_color}};
+            background-color: {{block.settings.video_button_color}};
+            letter-spacing: 0.1em;
+            font-weight: 600;
+          }
+        </style>
+        <a class="popup-video-btn {{block.settings.video_button_classes}} {{block.settings.responsiveClass}}" data-bs-toggle="modal" data-bs-target="#{{block.settings.video_button_target}}">{{block.settings.video_button_text}}</a>
+      {% endif %}
+
+      {% if block.type == 'video_static' %}
+        <style>
+
+          .video-image-box {
+            height: 0;
+            overflow: hidden;
+            padding-top: min(calc(9/16 * 100%));
+            background: url('{{block.settings.video_img_off | img_url:'master'}}') no-repeat ;
+            background-size:contain;
+            position: relative;
+            margin:0 auto;
+            display:block;
             }
-            #{{section.settings.uuid}} .popupover{
-              width: {{block.settings.popupoverWidth}}em;
-              height: {{block.settings.popupoverHeight}}em;
-              line-height: {{block.settings.popupoverLineHeight}}rem;
-            }
-            @media (max-width: 767px){
-                .{{ block.settings.positionClasses}}{
-                left: {{block.settings.mobleftPosition}};
-                top: {{block.settings.mobtopPosition}};
-                bottom: {{block.settings.mobbottomPosition}};
-                right: {{block.settings.mobrightPosition}};
-               }
-               #{{section.settings.uuid}} .popupover{
-               width: {{block.settings.mobpopupoverWidth}}em;
-               height: {{block.settings.mobpopupoverHeight}}em;
-               line-height: {{block.settings.mobpopupoverLineHeight}}rem;
-               }
+
+          .video-image-box:hover {
+              background-image: url({{block.settings.video_img_over | img_url:'master'}});
             }
         </style>
-        {% if block.settings.popupoverText != blank %}
-        <div class="vis-m position-absolute d-block d-md-none">
-          <div class="tooltip-wrapper">
-              <div class="tooltip-outer">
-                  <span class="tooltip-inner-content">
-                      <div class="tooltip-title">{{block.settings.popupoverText}}</div>
-                      <div class="tooltip-body"></div>
-                  </span>
-              </div>
-          </div>
+
+        <a class="video-image-box popup-video {{block.settings.video_player_static_classes}} {{block.settings.responsiveClass}}" data-bs-target="#{{ block.settings.video_img_url }}" data-bs-toggle="modal"> </a>
+      {% endif %}
+
+      {% if block.type == 'numpositionBlock' %}
+      <style>
+          .{{ block.settings.positionClasses}}{
+              left: {{block.settings.leftPosition}};
+              top: {{block.settings.topPosition}};
+              bottom: {{block.settings.bottomPosition}};
+              right: {{block.settings.rightPosition}};
+          }
+          #{{section.settings.uuid}} .popupover{
+            width: {{block.settings.popupoverWidth}}em;
+            height: {{block.settings.popupoverHeight}}em;
+            line-height: {{block.settings.popupoverLineHeight}}rem;
+          }
+          @media (max-width: 767px){
+              .{{ block.settings.positionClasses}}{
+              left: {{block.settings.mobleftPosition}};
+              top: {{block.settings.mobtopPosition}};
+              bottom: {{block.settings.mobbottomPosition}};
+              right: {{block.settings.mobrightPosition}};
+             }
+             #{{section.settings.uuid}} .popupover{
+             width: {{block.settings.mobpopupoverWidth}}em;
+             height: {{block.settings.mobpopupoverHeight}}em;
+             line-height: {{block.settings.mobpopupoverLineHeight}}rem;
+             }
+          }
+      </style>
+      {% if block.settings.popupoverText != blank %}
+      <div class="vis-m position-absolute d-block d-md-none">
+        <div class="tooltip-wrapper">
+            <div class="tooltip-outer">
+                <span class="tooltip-inner-content">
+                    <div class="tooltip-title">{{block.settings.popupoverText}}</div>
+                    <div class="tooltip-body"></div>
+                </span>
+            </div>
         </div>
-        {% endif %}
-           <div class="position-absolute hardware {{ block.settings.positionClasses}} {{block.settings.responsiveClass}}">
-               <span class="btn p-0 pe-none m-0 rounded-circle popupover d-none d-md-block {{block.settings.textClass}}" style="background-color:{{block.settings.bgColor}};">{{block.settings.textText}}</span>
-  
-               <span class="icon-num btn p-0 m-0 rounded-circle popupover d-block d-md-none {{block.settings.mobtextClass}}" name="tooltip-link" data-title="{{ block.settings.popupoverText }}" style="
-               background-color:{{block.settings.mobbgColor}};">{{block.settings.mobtextText}}</span>
-               {{block.settings.customHTML}}
-           </div>
-        {% endif %}
-  
-                {% if block.type == "inlineVideo" %}
-                <div class="ratio {{ block.settings.videoOuterClass}} {{block.settings.responsiveClass}}">
-                  <iframe src="{{block.settings.inline-video-url}}&badge=0&autoplay=1&loop=1&autopause=0&player_id=0&app_id=58479&controls=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;" title="{{block.settings.inline-video-title}}"></iframe>
-                </div> 
-              {% endif %}  
-  
-              {% if block.type == "list-col-start" %}
-                <ul class="{{ block.settings.ul-class}} {{ block.settings.responsiveClass }}">
-              {% endif %}
-              {% if block.type == "list-col" %}
-                <li class="{{ block.settings.li-class }} {{block.settings.responsiveClass }}">{{block.settings.list}}</li>
-              {% endif %}
-              {% if block.type == "list-col-end" %}
-                </ul>   
-              {% endif %}
-  
-              {% if block.type == 'startcarouselBlock' %}
-                <div id="{{block.settings.carouselId}}" class="carousel slide {{block.settings.carouselClass}}" data-bs-ride="carousel" data-bs-interval="false">
-              {% endif %}
-  
-              {% if block.type == 'startcaroselIndicators' %}
-              <style>
-                  #{{block.settings.carouselId}} .carousel-indicators{
-                    position: absolute;
-                    top: {{block.settings.positionTop}} !important;
-                    left: {{block.settings.positionLeft}} !important;
-                    right: {{block.settings.positionRight}} !important;
-                    bottom: {{block.settings.positionBottom}} !important;
-                  }      
-                </style>
-                <div class="carousel-indicators {{block.settings.carouselindicatorsClass}}" style="width: {{block.settings.indicatorWidth}}; margin: 0 auto;">
-              {% endif %}
-  
-              {% if block.type == 'carouselindicatorsBtn' %}
-              <style>
+      </div>
+      {% endif %}
+         <div class="position-absolute hardware {{ block.settings.positionClasses}} {{block.settings.responsiveClass}}">
+             <span class="btn p-0 pe-none m-0 rounded-circle popupover d-none d-md-block {{block.settings.textClass}}" style="background-color:{{block.settings.bgColor}};">{{block.settings.textText}}</span>
 
-                #{{block.settings.carouselId}} .carousel-indicators button.btn.special.active
-                {
-                  background-color: {{block.settings.activebgColor}} !important;
+             <span class="icon-num btn p-0 m-0 rounded-circle popupover d-block d-md-none {{block.settings.mobtextClass}}" name="tooltip-link" data-title="{{ block.settings.popupoverText }}" style="
+             background-color:{{block.settings.mobbgColor}};">{{block.settings.mobtextText}}</span>
+             {{block.settings.customHTML}}
+         </div>
+      {% endif %}
+
+              {% if block.type == "inlineVideo" %}
+              <div class="ratio {{ block.settings.videoOuterClass}} {{block.settings.responsiveClass}}">
+                <iframe src="{{block.settings.inline-video-url}}&badge=0&autoplay=1&loop=1&autopause=0&player_id=0&app_id=58479&controls=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;" title="{{block.settings.inline-video-title}}"></iframe>
+              </div>
+            {% endif %}
+
+            {% if block.type == "list-col-start" %}
+              <ul class="{{ block.settings.ul-class}} {{ block.settings.responsiveClass }}">
+            {% endif %}
+            {% if block.type == "list-col" %}
+              <li class="{{ block.settings.li-class }} {{block.settings.responsiveClass }}">{{block.settings.list}}</li>
+            {% endif %}
+            {% if block.type == "list-col-end" %}
+              </ul>
+            {% endif %}
+
+            {% if block.type == 'startcarouselBlock' %}
+              <div id="{{block.settings.carouselId}}" class="carousel slide {{block.settings.carouselClass}}" data-bs-ride="carousel" data-bs-interval="false">
+            {% endif %}
+
+            {% if block.type == 'startcarouselIndicators' %}
+            <style>
+                #{{block.settings.carouselId}} .carousel-indicators{
+                  position: absolute;
+                  top: {{block.settings.positionTop}} !important;
+                  left: {{block.settings.positionLeft}} !important;
+                  right: {{block.settings.positionRight}} !important;
+                  bottom: {{block.settings.positionBottom}} !important;
                 }
+              </style>
+              <div class="carousel-indicators {{block.settings.carouselindicatorsClass}}" style="width: {{block.settings.indicatorWidth}}; margin: 0 auto;">
+            {% endif %}
+
+            {% if block.type == 'carouselindicatorsBtn' %}
+            <style>
+
+              #{{block.settings.carouselId}} .carousel-indicators button.btn.special.active
+              {
+                background-color: {{block.settings.activebgColor}} !important;
+              }
+              {% if block.settings.indicatorsBtns == 'Buttons' %}
+              #{{block.settings.carouselId}} .carousel-indicators [data-bs-target] {
+                  box-sizing: border-box !important;
+                  flex:auto !important;
+                  width: auto !important;
+                  height: auto !important;
+                  padding: 0.8rem 1.2rem !important;
+                  margin-right: auto !important;
+                  margin-left: auto !important;
+                  text-indent: 0 !important;
+                  cursor: pointer;
+                  background-clip: padding-box !important;
+                  border: 0 !important;
+                  border-top: 0 !important;
+                  border-bottom: 0 !important;
+                  opacity: 1 !important;
+                  transition: none !important;
+              }
+              {% endif %}
+            </style>
                 {% if block.settings.indicatorsBtns == 'Buttons' %}
-                #{{block.settings.carouselId}} .carousel-indicators [data-bs-target] {
-                    box-sizing: border-box !important;
-                    flex:auto !important;
-                    width: auto !important;
-                    height: auto !important; 
-                    padding: 0.8rem 1.2rem !important;
-                    margin-right: auto !important;
-                    margin-left: auto !important;
-                    text-indent: 0 !important;
-                    cursor: pointer;
-                    background-clip: padding-box !important;
-                    border: 0 !important;
-                    border-top: 0 !important;
-                    border-bottom: 0 !important;
-                    opacity: 1 !important;
-                    transition: none !important;
-                }
+                  <button type="button" data-bs-target="#{{block.settings.carouselId}}" data-bs-slide-to="{{block.settings.slideNum}}"  style="background-color: {{block.settings.bgColor}}; color: {{block.settings.btntextColor}};"
+                  class="btn special {{block.settings.btn-size}} {{block.settings.btnClass}}" {% if block.settings.aria-current != blank %} aria-current="{{block.settings.aria-current}}" {% endif %} aria-label="{{block.settings.arialabel}}">{{block.settings.btnText}}</button>
                 {% endif %}
-              </style>
-                  {% if block.settings.indicatorsBtns == 'Buttons' %}
-                    <button type="button" data-bs-target="#{{block.settings.carouselId}}" data-bs-slide-to="{{block.settings.slideNum}}"  style="background-color: {{block.settings.bgColor}}; color: {{block.settings.btntextColor}};"
-                    class="btn special {{block.settings.btn-size}} {{block.settings.btnClass}}" {% if block.settings.aria-current != blank %} aria-current="{{block.settings.aria-current}}" {% endif %} aria-label="{{block.settings.arialabel}}">{{block.settings.btnText}}</button>
-                  {% endif %}
 
-                  {% if block.settings.indicatorsBtns == 'Default indicators' %}
-                  <style>
-                    #{{block.settings.carouselId}} .carousel-indicators [data-bs-target] {
-                      background-color: {{block.settings.bgColor}} !important;
-                      border: none;
-                      width: 2em;
-                      height: 0.2em;
-                    }
-                  </style>
-                  <button type="button" data-bs-target="#{{block.settings.carouselId}}" data-bs-slide-to="{{block.settings.slideNum}}" class="btn special{{block.settings.btn-size}} {{block.settings.btnClass}}" {% if block.settings.aria-current != blank %} aria-current="{{block.settings.aria-current}}" {% endif %} aria-label="{{block.settings.arialabel}}"></button>
-                  {% endif %}
-                  {% if block.settings.indicatorsBtns == 'Dots' %}
-                  <style>
-                    #{{block.settings.carouselId}} .carousel-indicators [data-bs-target] {
-                      background-color: {{block.settings.bgColor}} !important;
-                      border-radius: 100%;
-                      width: 1em;
-                      height: 1em;
-                      border:none;
-                    }
-                  </style>
-                  <button type="button" data-bs-target="#{{block.settings.carouselId}}" data-bs-slide-to="{{block.settings.slideNum}}" class="btn special {{block.settings.btn-size}} {{block.settings.btnClass}}" {% if block.settings.aria-current != blank %} aria-current="{{block.settings.aria-current}}" {% endif %} aria-label="{{block.settings.arialabel}}"></button>
-                  {% endif %}
-              {% endif %}
-  
-              {% if block.type == 'endcarouselIndicator' %}   
-                </div>
-              {% endif %}
-  
-              {% if block.type == 'startCarousel-inner' %}
-                    <div class="carousel-inner {{block.settings.extraClass}}">
-              {% endif %}
-  
-              {% if block.type == 'carouselItem' %}
-                    <div class="carousel-item {{block.settings.carouselItemClass}}">
-              {% endif %}
-  
-              {% if block.type == 'endcarouselItem' %}
+                {% if block.settings.indicatorsBtns == 'Default indicators' %}
+                <style>
+                  #{{block.settings.carouselId}} .carousel-indicators [data-bs-target] {
+                    background-color: {{block.settings.bgColor}} !important;
+                    border: none;
+                    width: 2em;
+                    height: 0.2em;
+                  }
+                </style>
+                <button type="button" data-bs-target="#{{block.settings.carouselId}}" data-bs-slide-to="{{block.settings.slideNum}}" class="btn special{{block.settings.btn-size}} {{block.settings.btnClass}}" {% if block.settings.aria-current != blank %} aria-current="{{block.settings.aria-current}}" {% endif %} aria-label="{{block.settings.arialabel}}"></button>
+                {% endif %}
+                {% if block.settings.indicatorsBtns == 'Dots' %}
+                <style>
+                  #{{block.settings.carouselId}} .carousel-indicators [data-bs-target] {
+                    background-color: {{block.settings.bgColor}} !important;
+                    border-radius: 100%;
+                    width: 1em;
+                    height: 1em;
+                    border:none;
+                  }
+                </style>
+                <button type="button" data-bs-target="#{{block.settings.carouselId}}" data-bs-slide-to="{{block.settings.slideNum}}" class="btn special {{block.settings.btn-size}} {{block.settings.btnClass}}" {% if block.settings.aria-current != blank %} aria-current="{{block.settings.aria-current}}" {% endif %} aria-label="{{block.settings.arialabel}}"></button>
+                {% endif %}
+            {% endif %}
+
+            {% if block.type == 'endcarouselIndicator' %}
+              </div>
+            {% endif %}
+
+            {% if block.type == 'startCarousel-inner' %}
+                  <div class="carousel-inner {{block.settings.extraClass}}">
+            {% endif %}
+
+            {% if block.type == 'carouselItem' %}
+                  <div class="carousel-item {{block.settings.carouselItemClass}}">
+            {% endif %}
+
+            {% if block.type == 'endcarouselItem' %}
+                  </div>
+            {% endif %}
+
+            {% if block.type == 'endcarouselInner' %}
+                  </div>
+            {% endif %}
+
+            {% if block.type == 'endcarousel' %}
+                  </div>
+            {% endif %}
+
+            {% if block.type == 'accordionStart' %}
+              <div class="accordion {{block.settings.accordionClass}}" id="{{block.settings.accordionID}}">
+                {{block.settings.accordioncustomHTML}}
+            {% endif %}
+
+            {% if block.type == 'accordionItem' %}
+                {{block.settings.customHTML}}
+
+                <style>
+                  @font-face{font-family:"Font Awesome 5 Brands";font-style:normal;font-weight:normal;font-display:auto;src:url(fa-brands-400.eot);src:url(fa-brands-400.eot?#iefix) format("embedded-opentype"),url(fa-brands-400.woff2) format("woff2"),url(fa-brands-400.woff) format("woff"),url(fa-brands-400.ttf) format("truetype"),url(fa-brands-400.svg#fontawesome) format("svg")}
+
+                  .fab{font-family:"Font Awesome 5 Brands"}
+                  @font-face{font-family:"Font Awesome 5 Pro";font-style:normal;font-weight:300;font-display:auto;src:url(fa-light-300.eot);src:url(fa-light-300.eot?#iefix) format("embedded-opentype"),url(fa-light-300.woff2) format("woff2"),url(fa-light-300.woff) format("woff"),url(fa-light-300.ttf) format("truetype"),url(fa-light-300.svg#fontawesome) format("svg")}
+
+                  .fal{font-weight:300}
+                  @font-face{font-family:"Font Awesome 5 Pro";font-style:normal;font-weight:400;font-display:auto;src:url(fa-regular-400.eot);src:url(fa-regular-400.eot?#iefix) format("embedded-opentype"),url(fa-regular-400.woff2) format("woff2"),url(fa-regular-400.woff) format("woff"),url(fa-regular-400.ttf) format("truetype"),url(fa-regular-400.svg#fontawesome) format("svg")}
+
+                  .fal,.far{font-family:"Font Awesome 5 Pro"}.far{font-weight:400}
+                  @font-face{font-family:"Font Awesome 5 Pro";font-style:normal;font-weight:900;font-display:auto;src:url(fa-solid-900.eot);src:url(fa-solid-900.eot?#iefix) format("embedded-opentype"),url(fa-solid-900.woff2) format("woff2"),url(fa-solid-900.woff) format("woff"),url(fa-solid-900.ttf) format("truetype"),url(fa-solid-900.svg#fontawesome) format("svg")}.fa,.fas{font-family:"Font Awesome 5 Pro";font-weight:900}
+                  .accordion-header button.accordion-button{
+                    background-color: {{block.settings.btnBGcolor}} !important;
+                    color: {{block.settings.btntextColor}};
+                    border: none;
+                    border-bottom: {{block.settings.btnborderBottom}}rem solid {{block.settings.btnBorderBottomColor}} !important;
+                  }
+                  .accordion-button::after {
+              font-family:"Font Awesome 5 Pro";
+                    content:"\{{block.settings.btnAfter}}";
+                    font-size:{{block.settings.btnsize}}rem;
+                  }
+                  .accordion-button:not(.collapsed)::after {
+              font-family:"Font Awesome 5 Pro";
+                    content:"\{{block.settings.btnbefore}}";
+                    font-size:{{block.settings.btnsize}}rem;
+                  }
+                </style>
+                <div class="accordion-item {{block.settings.accordionItemClass}}">
+                  <h2 class="accordion-header {{block.settings.accordionHeaderClass}}" id="{{block.settings.accordionHeaderID}}">
+                    <button class="accordion-button {{block.settings.accordionButtonClass}}" type="button" data-bs-toggle="collapse" data-bs-target="#{{block.settings.btnTarget}}" aria-expanded="{{block.settings.accordionButtonAriaexpanded}}" aria-controls= "{{block.settings.btnTarget}}">
+                      {{block.settings.accordionButtonText}}
+                    </button>
+                  </h2>
+            {% endif %}
+
+            {% if block.type == 'startColapseBody' %}
+            <style>
+              .accordion-body{
+                background: transparent;
+              }
+            </style>
+                  <div id="{{block.settings.collapseID}}" class="accordion-collapse {{block.settings.accordionClass}}" aria-labelledby="{{block.settings.arialabel}}" data-bs-parent="#{{block.settings.accordionParentID}}">
+                    <div class="accordion-body {{block.settings.accordionBodyClass}}">
+            {% endif %}
+
+            {% if block.type == 'endCollapseBody' %}
                     </div>
-              {% endif %}
-  
-              {% if block.type == 'endcarouselInner' %}
-                    </div>
-              {% endif %}
-  
-              {% if block.type == 'endcarousel' %}
-                    </div>
-              {% endif %}
-  
-              {% if block.type == 'accordionStart' %}
-                <div class="accordion {{block.settings.accordionClass}}" id="{{block.settings.accordionID}}">
-                  {{block.settings.accordioncustomHTML}}
-              {% endif %}
-  
-              {% if block.type == 'accordionItem' %}
-                  {{block.settings.customHTML}}
-                  
-                  <style>
-                    @font-face{font-family:"Font Awesome 5 Brands";font-style:normal;font-weight:normal;font-display:auto;src:url(fa-brands-400.eot);src:url(fa-brands-400.eot?#iefix) format("embedded-opentype"),url(fa-brands-400.woff2) format("woff2"),url(fa-brands-400.woff) format("woff"),url(fa-brands-400.ttf) format("truetype"),url(fa-brands-400.svg#fontawesome) format("svg")}
-       
-                    .fab{font-family:"Font Awesome 5 Brands"}
-                    @font-face{font-family:"Font Awesome 5 Pro";font-style:normal;font-weight:300;font-display:auto;src:url(fa-light-300.eot);src:url(fa-light-300.eot?#iefix) format("embedded-opentype"),url(fa-light-300.woff2) format("woff2"),url(fa-light-300.woff) format("woff"),url(fa-light-300.ttf) format("truetype"),url(fa-light-300.svg#fontawesome) format("svg")}
-                    
-                    .fal{font-weight:300}
-                    @font-face{font-family:"Font Awesome 5 Pro";font-style:normal;font-weight:400;font-display:auto;src:url(fa-regular-400.eot);src:url(fa-regular-400.eot?#iefix) format("embedded-opentype"),url(fa-regular-400.woff2) format("woff2"),url(fa-regular-400.woff) format("woff"),url(fa-regular-400.ttf) format("truetype"),url(fa-regular-400.svg#fontawesome) format("svg")}
-                    
-                    .fal,.far{font-family:"Font Awesome 5 Pro"}.far{font-weight:400}
-                    @font-face{font-family:"Font Awesome 5 Pro";font-style:normal;font-weight:900;font-display:auto;src:url(fa-solid-900.eot);src:url(fa-solid-900.eot?#iefix) format("embedded-opentype"),url(fa-solid-900.woff2) format("woff2"),url(fa-solid-900.woff) format("woff"),url(fa-solid-900.ttf) format("truetype"),url(fa-solid-900.svg#fontawesome) format("svg")}.fa,.fas{font-family:"Font Awesome 5 Pro";font-weight:900}
-                    .accordion-header button.accordion-button{
-                      background-color: {{block.settings.btnBGcolor}} !important;
-                      color: {{block.settings.btntextColor}};
-                      border: none;
-                      border-bottom: {{block.settings.btnborderBottom}}rem solid {{block.settings.btnBorderBottomColor}} !important;
-                    }
-                    .accordion-button::after {
-                font-family:"Font Awesome 5 Pro";
-                      content:"\{{block.settings.btnAfter}}";
-                      font-size:{{block.settings.btnsize}}rem;
-                    }
-                    .accordion-button:not(.collapsed)::after {
-                font-family:"Font Awesome 5 Pro";
-                      content:"\{{block.settings.btnbefore}}";
-                      font-size:{{block.settings.btnsize}}rem;
-                    }
-                  </style>
-                  <div class="accordion-item {{block.settings.accordionItemClass}}">
-                    <h2 class="accordion-header {{block.settings.accordionHeaderClass}}" id="{{block.settings.accordionHeaderID}}">
-                      <button class="accordion-button {{block.settings.accordionButtonClass}}" type="button" data-bs-toggle="collapse" data-bs-target="#{{block.settings.btnTarget}}" aria-expanded="{{block.settings.accordionButtonAriaexpanded}}" aria-controls= "{{block.settings.btnTarget}}">
-                        {{block.settings.accordionButtonText}}
-                      </button>
-                    </h2>
-              {% endif %}
-  
-              {% if block.type == 'startColapseBody' %}
-              <style>
-                .accordion-body{
-                  background: transparent;
-                }
-              </style>
-                    <div id="{{block.settings.collapseID}}" class="accordion-collapse {{block.settings.accordionClass}}" aria-labelledby="{{block.settings.arialabel}}" data-bs-parent="#{{block.settings.accordionParentID}}">
-                      <div class="accordion-body {{block.settings.accordionBodyClass}}">
-              {% endif %}
-              
-              {% if block.type == 'endCollapseBody' %}
-                      </div>
-                    </div>
-              {% endif %}
-          
-              {% if block.type == 'accordionEnd' %}
-                </div>
-              {% endif %}
-  
-              {% if block.type == 'accordion-itemEnd' %}
-                </div>
-              {% endif %}
-              
-            {% endfor %}
-  
-        
-        </div>     
-        
-    </section>  
-  </div>
-    
-    {% schema %}
-    
-    {
-      "name": "Bs Dawn Content",
-      "settings": [{
-          "type": "text",
-          "id": "uuid",
-          "label": "Unique ID"
-        },
-        {
-          "type": "text",
-          "id": "section-class",
-          "label": "Addtion Section Class"
-        },
-        {
-          "type": "text",
-          "id": "section-min-height",
-          "label": "Section Min height"
-        },
-        {
-          "type": "color",
-          "id": "section-bg-color",
-          "label": "Section BG Color"
-        },
-        {
-          "type": "text",
-          "id": "spacing-container-class",
-          "label": "Container Custom Class"
-        },
-    
-        {
-          "type": "select",
-          "id": "container-class",
-          "label": "Container Class",
-          "options": [{
-              "value": "container-pf",
-              "label": "progressive"
-            },
-            {
-              "value": "container",
-              "label": "Responsive"
-            },
-            {
-              "value": "container-fluid",
-              "label": "Fluid"
-            }
-          ],
-          "default": "container-pf"
-        },
-        {
-          "type": "color",
-          "id": "fade_color-left",
-          "label": "Left Fade Color"
-        },
-        {
-          "id": "show_left_fade",
-          "type": "checkbox",
-          "label": "Show Left overlay",
-          "default": false
-        },
-        {
-          "id": "left_fade_percentage",
-          "type": "text",
-          "label": "Left Fade Percentage",
-          "default": "10%"
-        },
-    
-        {
-          "type": "color",
-          "id": "fade_color-right",
-          "label": "Right Fade Color"
-        },
-        {
-          "id": "show_right_fade",
-          "type": "checkbox",
-          "label": "Show Right overlay",
-          "default": false
-        },
-        {
-          "id": "right_fade_percentage",
-          "type": "text",
-          "label": "Right Fade Percentage",
-          "default": "90%"
-        },
-        {
-          "type": "image_picker",
-          "id": "section-bg",
-          "label": "Section Background image"
-        },
-        {
-          "type": "text",
-          "id": "section-bg-size",
-          "label": "Background Size",
-          "default": "73em auto"
-        },
-        {
-          "type": "select",
-          "id": "bg-position",
-          "label": "Section Background Position",
-          "options": [{
-              "value": "center top",
-              "label": "Center Top"
-            },
-            {
-              "value": "center center",
-              "label": "Center"
-            },
-            {
-              "value": "center bottom",
-              "label": "Center Bottom"
-            },
-            {
-              "value": "top left",
-              "label": "Top Left"
-            },
-            {
-              "value": "top right",
-              "label": "Top Right"
-            },
-            {
-              "value": "bottom left",
-              "label": "Bottom Left"
-            },
-            {
-              "value": "bottom right",
-              "label": "Bototm Right"
-            },
-            {
-              "value": "bottom center",
-              "label": "Bottom Center"
-            }
-          ],
-          "default": "center center"
-        },
-        {
-          "type": "select",
-          "id": "bg-repeat",
-          "label": "Background Repeat",
-          "options": [{
-              "value": "no-repeat",
-              "label": "No Repeat"
-            },
-            {
-              "value": "repeat",
-              "label": "Repeat"
-            },
-            {
-              "value": "repeat-x",
-              "label": "Repeat X"
-            },
-            {
-              "value": "repeat-y",
-              "label": "Repeat Y"
-            }
-          ],
-          "default": "no-repeat"
-        },
-        {
-          "type": "image_picker",
-          "id": "section-mobile-bg",
-          "label": "Section Mobile Background image"
-        },
-        {
-          "type": "text",
-          "id": "section-mobile-bg-size",
-          "label": "Background Size"
-        },
-        {
-          "type": "select",
-          "id": "mobile-bg-position",
-          "label": "Mobile Section Background Position",
-          "options": [{
-              "value": "center top",
-              "label": "Center Top"
-            },
-            {
-              "value": "center center",
-              "label": "Center"
-            },
-            {
-              "value": "center bottom",
-              "label": "Center Bottom"
-            },
-            {
-              "value": "top left",
-              "label": "Top Left"
-            },
-            {
-              "value": "top right",
-              "label": "Top Right"
-            },
-            {
-              "value": "bottom left",
-              "label": "Bottom Left"
-            },
-            {
-              "value": "bottom right",
-              "label": "Bototm Right"
-            },
-            {
-              "value": "bottom center",
-              "label": "Bottom Center"
-            }
-          ],
-          "default": "center center"
-        },
-        {
-          "type": "select",
-          "id": "mobile-bg-repeat",
-          "label": "Mobile Background Repeat",
-          "options": [{
-              "value": "no-repeat",
-              "label": "No Repeat"
-            },
-            {
-              "value": "repeat",
-              "label": "Repeat"
-            },
-            {
-              "value": "repeat-x",
-              "label": "Repeat X"
-            },
-            {
-              "value": "repeat-y",
-              "label": "Repeat Y"
-            }
-          ],
-          "default": "no-repeat"
-        },
-        {
-          "type": "text",
-          "id": "section-mobile-min-height",
-          "label": "Mobile min-height"
-        },
-        {
-          "type": "html",
-          "id": "customHtmlStyles",
-          "label": "Custom Html"
-        }
-      ],
-      "blocks": [{
-          "type": "html",
-          "name": "Text",
-          "settings": [{
-              "type": "liquid",
-              "id": "col-line-1",
-              "label": "Liquid / HTML / Text"
-            },
-            {
+                  </div>
+            {% endif %}
+
+            {% if block.type == 'accordionEnd' %}
+              </div>
+            {% endif %}
+
+            {% if block.type == 'accordion-itemEnd' %}
+              </div>
+            {% endif %}
+
+          {% endfor %}
+
+
+      </div>
+
+  </section>
+</div>
+
+  {% schema %}
+
+  {
+    "name": "SE BS Dawn Content",
+    "settings": [{
+        "type": "text",
+        "id": "uuid",
+        "label": "Unique ID"
+      },
+      {
+        "type": "text",
+        "id": "section-class",
+        "label": "Addtion Section Class"
+      },
+      {
+        "type": "text",
+        "id": "section-min-height",
+        "label": "Section Min height"
+      },
+      {
+        "type": "color",
+        "id": "section-bg-color",
+        "label": "Section BG Color"
+      },
+      {
+        "type": "text",
+        "id": "spacing-container-class",
+        "label": "Container Custom Class"
+      },
+
+      {
+        "type": "select",
+        "id": "container-class",
+        "label": "Container Class",
+        "options": [{
+            "value": "container-pf",
+            "label": "progressive"
+          },
+          {
+            "value": "container",
+            "label": "Responsive"
+          },
+          {
+            "value": "container-fluid",
+            "label": "Fluid"
+          }
+        ],
+        "default": "container-pf"
+      },
+      {
+        "type": "color",
+        "id": "fade_color-left",
+        "label": "Left Fade Color"
+      },
+      {
+        "id": "show_left_fade",
+        "type": "checkbox",
+        "label": "Show Left overlay",
+        "default": false
+      },
+      {
+        "id": "left_fade_percentage",
+        "type": "text",
+        "label": "Left Fade Percentage",
+        "default": "10%"
+      },
+
+      {
+        "type": "color",
+        "id": "fade_color-right",
+        "label": "Right Fade Color"
+      },
+      {
+        "id": "show_right_fade",
+        "type": "checkbox",
+        "label": "Show Right overlay",
+        "default": false
+      },
+      {
+        "id": "right_fade_percentage",
+        "type": "text",
+        "label": "Right Fade Percentage",
+        "default": "90%"
+      },
+      {
+        "type": "image_picker",
+        "id": "section-bg",
+        "label": "Section Background image"
+      },
+      {
+        "type": "text",
+        "id": "section-bg-size",
+        "label": "Background Size",
+        "default": "73em auto"
+      },
+      {
+        "type": "select",
+        "id": "bg-position",
+        "label": "Section Background Position",
+        "options": [{
+            "value": "center top",
+            "label": "Center Top"
+          },
+          {
+            "value": "center center",
+            "label": "Center"
+          },
+          {
+            "value": "center bottom",
+            "label": "Center Bottom"
+          },
+          {
+            "value": "top left",
+            "label": "Top Left"
+          },
+          {
+            "value": "top right",
+            "label": "Top Right"
+          },
+          {
+            "value": "bottom left",
+            "label": "Bottom Left"
+          },
+          {
+            "value": "bottom right",
+            "label": "Bototm Right"
+          },
+          {
+            "value": "bottom center",
+            "label": "Bottom Center"
+          }
+        ],
+        "default": "center center"
+      },
+      {
+        "type": "select",
+        "id": "bg-repeat",
+        "label": "Background Repeat",
+        "options": [{
+            "value": "no-repeat",
+            "label": "No Repeat"
+          },
+          {
+            "value": "repeat",
+            "label": "Repeat"
+          },
+          {
+            "value": "repeat-x",
+            "label": "Repeat X"
+          },
+          {
+            "value": "repeat-y",
+            "label": "Repeat Y"
+          }
+        ],
+        "default": "no-repeat"
+      },
+      {
+        "type": "image_picker",
+        "id": "section-mobile-bg",
+        "label": "Section Mobile Background image"
+      },
+      {
+        "type": "text",
+        "id": "section-mobile-bg-size",
+        "label": "Background Size"
+      },
+      {
+        "type": "select",
+        "id": "mobile-bg-position",
+        "label": "Mobile Section Background Position",
+        "options": [{
+            "value": "center top",
+            "label": "Center Top"
+          },
+          {
+            "value": "center center",
+            "label": "Center"
+          },
+          {
+            "value": "center bottom",
+            "label": "Center Bottom"
+          },
+          {
+            "value": "top left",
+            "label": "Top Left"
+          },
+          {
+            "value": "top right",
+            "label": "Top Right"
+          },
+          {
+            "value": "bottom left",
+            "label": "Bottom Left"
+          },
+          {
+            "value": "bottom right",
+            "label": "Bototm Right"
+          },
+          {
+            "value": "bottom center",
+            "label": "Bottom Center"
+          }
+        ],
+        "default": "center center"
+      },
+      {
+        "type": "select",
+        "id": "mobile-bg-repeat",
+        "label": "Mobile Background Repeat",
+        "options": [{
+            "value": "no-repeat",
+            "label": "No Repeat"
+          },
+          {
+            "value": "repeat",
+            "label": "Repeat"
+          },
+          {
+            "value": "repeat-x",
+            "label": "Repeat X"
+          },
+          {
+            "value": "repeat-y",
+            "label": "Repeat Y"
+          }
+        ],
+        "default": "no-repeat"
+      },
+      {
+        "type": "text",
+        "id": "section-mobile-min-height",
+        "label": "Mobile min-height"
+      },
+      {
+        "type": "html",
+        "id": "customHtmlStyles",
+        "label": "Custom Html"
+      }
+    ],
+    "blocks": [{
+        "type": "html",
+        "name": "Text",
+        "settings": [{
+            "type": "liquid",
+            "id": "col-line-1",
+            "label": "Liquid / HTML / Text"
+          },
+          {
+            "type": "select",
+            "id": "line-1-size",
+            "label": "Text Size Tag",
+            "options": [{
+                "value": "H1",
+                "label": "h1 (56)"
+              },
+              {
+                "value": "H2",
+                "label": "h2 (49)"
+              },
+              {
+                "value": "H3",
+                "label": "h3 (40)"
+              },
+              {
+                "value": "H4",
+                "label": "h4 (32)"
+              },
+              {
+                "value": "H5",
+                "label": "h5 (24)"
+              },
+              {
+                "value": "H6",
+                "label": "h6 (20)"
+              },
+              {
+                "value": "P",
+                "label": "p (20)"
+              },
+              {
+                "value": "fs-7",
+                "label": "Small Text (16)"
+              }
+            ],
+            "default": "P"
+          },
+          {
+            "type": "select",
+            "id": "col-line-1-classes",
+            "label": "Font Size Classes",
+            "options": [{
+                "value": "display-1",
+                "label": "display-1 (94px)"
+              },
+              {
+                "value": "display-2",
+                "label": "display-2 (89px)"
+              },
+              {
+                "value": "display-3",
+                "label": "display-3 (80px)"
+              },
+              {
+                "value": "display-4",
+                "label": "display-4 (77px)"
+              },
+              {
+                "value": "display-5",
+                "label": "display-5 (71px)"
+              },
+              {
+                "value": "display-6",
+                "label": "display-6 (65px)"
+              },
+              {
+                "value": "fs-1",
+                "label": "fs-1 (56px)"
+              },
+              {
+                "value": "fs-2",
+                "label": "fs-2 (48px)"
+              },
+              {
+                "value": "fs-3",
+                "label": "fs-3 (40px)"
+              },
+              {
+                "value": "fs-4",
+                "label": "fs-4 (32px)"
+              },
+              {
+                "value": "fs-5",
+                "label": "fs-5 (24px)"
+              },
+              {
+                "value": "fs-6",
+                "label": "fs-6 (20px)"
+              },
+              {
+                "value": "fs-7",
+                "label": "fs-7 (16px)"
+              },
+              {
+                "value": "fs-8",
+                "label": "fs-8 (14px)"
+              },
+              {
+                "value": "fs-9",
+                "label": "fs-9 (12px)"
+              },
+              {
+                "value": "fs-10",
+                "label": "fs-10 (8px)"
+              },
+              {
+                "value": "fs-19",
+                "label": "fs-19 (19px)"
+              },
+              {
+                "value": "none",
+                "label": "None"
+              }
+            ],
+            "default": "none"
+          },
+          {
+            "type": "text",
+            "id": "add-class",
+            "label": "Add Class"
+          },
+          {
+            "type": "color",
+            "id": "line-1-color",
+            "label": "Text Color"
+          },
+          {
               "type": "select",
-              "id": "line-1-size",
-              "label": "Text Size Tag",
-              "options": [{
-                  "value": "H1",
-                  "label": "h1 (56)"
-                },
-                {
-                  "value": "H2",
-                  "label": "h2 (49)"
-                },
-                {
-                  "value": "H3",
-                  "label": "h3 (40)"
-                },
-                {
-                  "value": "H4",
-                  "label": "h4 (32)"
-                },
-                {
-                  "value": "H5",
-                  "label": "h5 (24)"
-                },
-                {
-                  "value": "H6",
-                  "label": "h6 (20)"
-                },
-                {
-                  "value": "P",
-                  "label": "p (20)"
-                },
-                {
-                  "value": "fs-7",
-                  "label": "Small Text (16)"
-                }
-              ],
-              "default": "P"
-            },
-            {
-              "type": "select",
-              "id": "col-line-1-classes",
-              "label": "Font Size Classes",
+              "id": "col-line-2-classes",
+              "label": "Font Size Classes for Mobile",
               "options": [{
                   "value": "display-1",
-                  "label": "display-1 (94px)"
+                  "label": "display-1 (75px)"
                 },
                 {
                   "value": "display-2",
-                  "label": "display-2 (89px)"
+                  "label": "display-2 (71px)"
                 },
                 {
                   "value": "display-3",
-                  "label": "display-3 (80px)"
+                  "label": "display-3 (56px)"
                 },
                 {
                   "value": "display-4",
-                  "label": "display-4 (77px)"
+                  "label": "display-4 (61px)"
                 },
                 {
                   "value": "display-5",
-                  "label": "display-5 (71px)"
+                  "label": "display-5 (56px)"
                 },
                 {
                   "value": "display-6",
-                  "label": "display-6 (65px)"
+                  "label": "display-6 (49px)"
                 },
                 {
                   "value": "fs-1",
-                  "label": "fs-1 (56px)"
+                  "label": "fs-1 (40px)"
                 },
                 {
                   "value": "fs-2",
-                  "label": "fs-2 (48px)"
+                  "label": "fs-2 (32px)"
                 },
                 {
                   "value": "fs-3",
-                  "label": "fs-3 (40px)"
+                  "label": "fs-3 (24px)"
                 },
                 {
                   "value": "fs-4",
-                  "label": "fs-4 (32px)"
+                  "label": "fs-4 (20px)"
                 },
                 {
                   "value": "fs-5",
-                  "label": "fs-5 (24px)"
+                  "label": "fs-5 (20px)"
                 },
                 {
                   "value": "fs-6",
-                  "label": "fs-6 (20px)"
+                  "label": "fs-6 (16px)"
                 },
                 {
                   "value": "fs-7",
-                  "label": "fs-7 (16px)"
+                  "label": "fs-7 (14px)"
                 },
                 {
                   "value": "fs-8",
-                  "label": "fs-8 (14px)"
+                  "label": "fs-8 (12px)"
                 },
                 {
                   "value": "fs-9",
-                  "label": "fs-9 (12px)"
+                  "label": "fs-9 (10px)"
                 },
                 {
                   "value": "fs-10",
@@ -913,7 +1035,7 @@
                 },
                 {
                   "value": "fs-19",
-                  "label": "fs-19 (19px)"
+                  "label": "fs-19 (12px)"
                 },
                 {
                   "value": "none",
@@ -921,1825 +1043,1809 @@
                 }
               ],
               "default": "none"
-            },
-            {
-              "type": "text",
-              "id": "add-class",
-              "label": "Add Class"
-            },
-            {
-              "type": "color",
-              "id": "line-1-color",
-              "label": "Text Color"
-            },
-            {
-                "type": "select",
-                "id": "col-line-2-classes",
-                "label": "Font Size Classes for Mobile",
-                "options": [{
-                    "value": "display-1",
-                    "label": "display-1 (75px)"
-                  },
-                  {
-                    "value": "display-2",
-                    "label": "display-2 (71px)"
-                  },
-                  {
-                    "value": "display-3",
-                    "label": "display-3 (56px)"
-                  },
-                  {
-                    "value": "display-4",
-                    "label": "display-4 (61px)"
-                  },
-                  {
-                    "value": "display-5",
-                    "label": "display-5 (56px)"
-                  },
-                  {
-                    "value": "display-6",
-                    "label": "display-6 (49px)"
-                  },
-                  {
-                    "value": "fs-1",
-                    "label": "fs-1 (40px)"
-                  },
-                  {
-                    "value": "fs-2",
-                    "label": "fs-2 (32px)"
-                  },
-                  {
-                    "value": "fs-3",
-                    "label": "fs-3 (24px)"
-                  },
-                  {
-                    "value": "fs-4",
-                    "label": "fs-4 (20px)"
-                  },
-                  {
-                    "value": "fs-5",
-                    "label": "fs-5 (20px)"
-                  },
-                  {
-                    "value": "fs-6",
-                    "label": "fs-6 (16px)"
-                  },
-                  {
-                    "value": "fs-7",
-                    "label": "fs-7 (14px)"
-                  },
-                  {
-                    "value": "fs-8",
-                    "label": "fs-8 (12px)"
-                  },
-                  {
-                    "value": "fs-9",
-                    "label": "fs-9 (10px)"
-                  },
-                  {
-                    "value": "fs-10",
-                    "label": "fs-10 (8px)"
-                  },
-                  {
-                    "value": "fs-19",
-                    "label": "fs-19 (12px)"
-                  },
-                  {
-                    "value": "none",
-                    "label": "None"
-                  }
-                ],
-                "default": "none"
-            },
-            {
-                "type": "text",
-                "id": "customfontmobo",
-                "label": "Custom font-size for Mobile"
-            },
-            {
-              "id": "responsiveClass",
-              "type": "select",
-              "label": "Display Class",
-              "options": [{
-                  "value": "d-none",
-                  "label": "Always Hide (d-none)"
-                },
-                {
-                  "value": "d-block",
-                  "label": "Always Show (d-block)"
-                },
-                {
-                  "value": "d-none d-md-block",
-                  "label": "Desktop (d-none d-md-block)"
-                },
-                {
-                  "value": "d-none d-md-flex",
-                  "label": "Flex For Desktop (d-none d-md-flex)"
-                },
-                {
-                  "value": "d-none d-md-inline-block",
-                  "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
-                },
-                {
-                  "value": "d-block d-md-none",
-                  "label": "Only Mobile (d-block d-md-none)"
-                },
-                {
-                  "value": "d-flex d-md-none",
-                  "label": "Flex For Mobile (d-flex d-md-none)"
-                },
-                {
-                  "value": "d-inline-block d-md-none",
-                  "label": "Inline Block For Mobile (d-inline-block d-md-none)"
-                },
-                {
-                  "value": "None",
-                  "label": "None"
-                }
-              ],
-              "default": "None"
-            }
-          ]
-        },
-        {
-          "type": "list-col-start",
-          "name": "Start UL tag",
-          "settings": [{
-              "type": "text",
-              "id": "ul-class",
-              "label": "Ul Class"
-            },
-            {
-              "id": "responsiveClass",
-              "type": "select",
-              "label": "Display",
-              "options": [{
-                  "value": "d-none",
-                  "label": "Always Hide (d-none)"
-                },
-                {
-                  "value": "d-block",
-                  "label": "Always Show (d-block)"
-                },
-                {
-                  "value": "d-none d-md-block",
-                  "label": "Desktop (d-none d-md-block)"
-                },
-                {
-                  "value": "d-none d-md-flex",
-                  "label": "Flex For Desktop (d-none d-md-flex)"
-                },
-                {
-                  "value": "d-none d-md-inline-block",
-                  "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
-                },
-                {
-                  "value": "d-block d-md-none",
-                  "label": "Only Mobile (d-block d-md-none)"
-                },
-                {
-                  "value": "d-flex d-md-none",
-                  "label": "Flex For Mobile (d-flex d-md-none)"
-                },
-                {
-                  "value": "d-inline-block d-md-none",
-                  "label": "Inline Block For Mobile (d-inline-block d-md-none)"
-                },
-                {
-                  "value": "None",
-                  "label": "None"
-                }
-              ],
-              "default": "None"
-            }
-          ]
-        },
-        {
-          "type": "list-col",
-          "name": "List col",
-          "settings": [{
-              "type": "text",
-              "id": "li-class",
-              "label": "Li class"
-            },
-            {
-              "type": "html",
-              "id": "list",
-              "label": "Li Content"
-            },
-            {
-              "id": "responsiveClass",
-              "type": "select",
-              "label": "Display",
-              "options": [{
-                  "value": "d-none",
-                  "label": "Always Hide (d-none)"
-                },
-                {
-                  "value": "d-block",
-                  "label": "Always Show (d-block)"
-                },
-                {
-                  "value": "d-none d-md-block",
-                  "label": "Desktop (d-none d-md-block)"
-                },
-                {
-                  "value": "d-none d-md-flex",
-                  "label": "Flex For Desktop (d-none d-md-flex)"
-                },
-                {
-                  "value": "d-none d-md-inline-block",
-                  "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
-                },
-                {
-                  "value": "d-block d-md-none",
-                  "label": "Only Mobile (d-block d-md-none)"
-                },
-                {
-                  "value": "d-flex d-md-none",
-                  "label": "Flex For Mobile (d-flex d-md-none)"
-                },
-                {
-                  "value": "d-inline-block d-md-none",
-                  "label": "Inline Block For Mobile (d-inline-block d-md-none)"
-                },
-                {
-                  "value": "None",
-                  "label": "None"
-                }
-              ],
-              "default": "None"
-            }
-          ]
-        },
-        {
-          "type": "list-col-end",
-          "name": "End UL Tag"
-        },
-        {
-          "type": "rowstart",
-          "name": "Start Row",
-          "settings": [{
-              "type": "text",
-              "id": "row-class",
-              "label": "Row Class"
-            },
-            {
-              "id": "responsiveClass",
-              "type": "select",
-              "label": "Display",
-              "options": [{
-                  "value": "d-none",
-                  "label": "Always Hide (d-none)"
-                },
-                {
-                  "value": "d-block",
-                  "label": "Always Show (d-block)"
-                },
-                {
-                  "value": "d-none d-md-block",
-                  "label": "Desktop (d-none d-md-block)"
-                },
-                {
-                  "value": "d-none d-md-flex",
-                  "label": "Flex For Desktop (d-none d-md-flex)"
-                },
-                {
-                  "value": "d-none d-md-inline-block",
-                  "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
-                },
-                {
-                  "value": "d-block d-md-none",
-                  "label": "Only Mobile (d-block d-md-none)"
-                },
-                {
-                  "value": "d-flex d-md-none",
-                  "label": "Flex For Mobile (d-flex d-md-none)"
-                },
-                {
-                  "value": "d-inline-block d-md-none",
-                  "label": "Inline Block For Mobile (d-inline-block d-md-none)"
-                },
-                {
-                  "value": "None",
-                  "label": "None"
-                }
-              ],
-              "default": "None"
-            }
-          ]
-        },
-        {
-          "type": "rowend",
-          "name": "End Row",
-          "settings": [{
-            "type": "color",
-            "id": "row-end-color",
-            "label": "Bg Color"
-          }]
-        },
-        {
-          "type": "col-start",
-          "name": "Start Column",
-          "settings": [{
-              "type": "text",
-              "id": "col-class",
-              "label": "Col Class"
-            },
-            {
-              "type": "number",
-              "id": "colOrder",
-              "label": "Column Order"
-            },
-            {
-              "id": "responsiveClass",
-              "type": "select",
-              "label": "Display",
-              "options": [{
-                  "value": "d-none",
-                  "label": "Always Hide (d-none)"
-                },
-                {
-                  "value": "d-block",
-                  "label": "Always Show (d-block)"
-                },
-                {
-                  "value": "d-none d-md-block",
-                  "label": "Desktop (d-none d-md-block)"
-                },
-                {
-                  "value": "d-none d-md-flex",
-                  "label": "Flex For Desktop (d-none d-md-flex)"
-                },
-                {
-                  "value": "d-none d-md-inline-block",
-                  "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
-                },
-                {
-                  "value": "d-block d-md-none",
-                  "label": "Only Mobile (d-block d-md-none)"
-                },
-                {
-                  "value": "d-flex d-md-none",
-                  "label": "Flex For Mobile (d-flex d-md-none)"
-                },
-                {
-                  "value": "d-inline-block d-md-none",
-                  "label": "Inline Block For Mobile (d-inline-block d-md-none)"
-                },
-                {
-                  "value": "None",
-                  "label": "None"
-                }
-              ],
-              "default": "None"
-            }
-          ]
-        },
-        {
-          "type": "col-end",
-          "name": "End Column",
-          "settings": [{
-            "type": "color",
-            "id": "col-end-color",
-            "label": "Bg Color"
-          }]
-        },
-        {
-          "type": "card",
-          "name": "Start Card",
-          "settings": [{
-              "type": "text",
-              "id": "cardClass",
-              "label": "Card Class"
-            },
-            {
-              "type": "select",
-              "id": "card-color",
-              "label": "Card Color",
-              "options": [{
-                  "value": "text-bg-primary",
-                  "label": "Primary (BS Blue)"
-                },
-                {
-                  "value": "text-bg-secondary",
-                  "label": "Secondary (BS Gray)"
-                },
-                {
-                  "value": "text-bg-success",
-                  "label": "Success (BS Green)"
-                },
-                {
-                  "value": "text-bg-danger",
-                  "label": "Danger (BS Red)"
-                },
-                {
-                  "value": "text-bg-warning",
-                  "label": "Warning (BS Yellow)"
-                },
-                {
-                  "value": "text-bg-info",
-                  "label": "Warning (BS Yellow)"
-                },
-                {
-                  "value": "text-bg-light",
-                  "label": "Light (BS Light Gray)"
-                },
-                {
-                  "value": "text-bg-dark",
-                  "label": "Dark (BS Dark Gray)"
-                },
-                {
-                  "value": " ",
-                  "label": "None"
-                }
-              ],
-              "default": " "
-            },
-            {
-              "type": "color_background",
-              "id": "cardBG",
-              "label": "Background Color"
-            },
-            {
-              "id": "responsiveClass",
-              "type": "select",
-              "label": "Display",
-              "options": [{
-                  "value": "d-none",
-                  "label": "Always Hide (d-none)"
-                },
-                {
-                  "value": "d-block",
-                  "label": "Always Show (d-block)"
-                },
-                {
-                  "value": "d-none d-md-block",
-                  "label": "Desktop (d-none d-md-block)"
-                },
-                {
-                  "value": "d-none d-md-flex",
-                  "label": "Flex For Desktop (d-none d-md-flex)"
-                },
-                {
-                  "value": "d-none d-md-inline-block",
-                  "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
-                },
-                {
-                  "value": "d-block d-md-none",
-                  "label": "Only Mobile (d-block d-md-none)"
-                },
-                {
-                  "value": "d-flex d-md-none",
-                  "label": "Flex For Mobile (d-flex d-md-none)"
-                },
-                {
-                  "value": "d-inline-block d-md-none",
-                  "label": "Inline Block For Mobile (d-inline-block d-md-none)"
-                },
-                {
-                  "value": "None",
-                  "label": "None"
-                }
-              ],
-              "default": "None"
-            }
-          ]
-        },
-        {
-          "type": "cardBody",
-          "name": "Start Card Body",
-          "settings": [{
-            "type": "text",
-            "id": "cardBodyClass",
-            "label": "Card Body Class"
-          }]
-        },
-        {
-          "type": "cardBodyEnd",
-          "name": "End Card Body"
-        },
-        {
-          "type": "card-end",
-          "name": "End Card"
-        },
-        {
-          "type": "imageBlock",
-          "name": "Image Block",
-          "settings": [{
-              "type": "text",
-              "id": "img-unique",
-              "label": "Add Unique ID for image width"
-            },
-            {
-              "id": "imageUrl",
-              "label": "Select Image",
-              "type": "image_picker"
-            },
-            {
-              "id": "imageUrlLink",
-              "type": "url",
-              "label": "Image Url Link"
-            },
-            {
-              "id": "imageClass",
-              "type": "text",
-              "label": "Image Class"
-            },
-            {
-              "id": "imgWidth",
-              "type": "text",
-              "label": "Image width in (em)"
-            },
-            {
-              "id": "mobimageUrl",
-              "label": "Select Mobile Image",
-              "type": "image_picker"
-            },
-            {
-              "id": "mobimageUrlLink",
-              "type": "url",
-              "label": "Mobile Image Url Link"
-            },
-            {
-              "id": "mobimgWidth",
-              "type": "text",
-              "label": "Mobile Image width in (em)"
-            },
-            {
-              "id": "responsiveClass",
-              "type": "select",
-              "label": "Display",
-              "options": [{
-                  "value": "d-none",
-                  "label": "Always Hide (d-none)"
-                },
-                {
-                  "value": "d-block",
-                  "label": "Always Show (d-block)"
-                },
-                {
-                  "value": "d-none d-md-block",
-                  "label": "Desktop (d-none d-md-block)"
-                },
-                {
-                  "value": "d-none d-md-flex",
-                  "label": "Flex For Desktop (d-none d-md-flex)"
-                },
-                {
-                  "value": "d-none d-md-inline-block",
-                  "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
-                },
-                {
-                  "value": "d-block d-md-none",
-                  "label": "Only Mobile (d-block d-md-none)"
-                },
-                {
-                  "value": "d-flex d-md-none",
-                  "label": "Flex For Mobile (d-flex d-md-none)"
-                },
-                {
-                  "value": "d-inline-block d-md-none",
-                  "label": "Inline Block For Mobile (d-inline-block d-md-none)"
-                },
-                {
-                  "value": "None",
-                  "label": "None"
-                }
-              ],
-              "default": "None"
-            }
-          ]
-        },
-        {
-          "type": "btn",
-          "name": "Button",
-          "settings": [{
-              "type": "text",
-              "id": "btn-text",
-              "label": "Button Text"
-            },
-            {
-              "type": "text",
-              "id": "btn-class",
-              "label": "Button Class"
-            },
-            {
-              "id": "responsiveClass",
-              "type": "select",
-              "label": "Display",
-              "options": [{
-                  "value": "d-none",
-                  "label": "Always Hide (d-none)"
-                },
-                {
-                  "value": "d-block",
-                  "label": "Always Show (d-block)"
-                },
-                {
-                  "value": "d-none d-md-block",
-                  "label": "Desktop (d-none d-md-block)"
-                },
-                {
-                  "value": "d-none d-md-flex",
-                  "label": "Flex For Desktop (d-none d-md-flex)"
-                },
-                {
-                  "value": "d-none d-md-inline-block",
-                  "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
-                },
-                {
-                  "value": "d-block d-md-none",
-                  "label": "Only Mobile (d-block d-md-none)"
-                },
-                {
-                  "value": "d-flex d-md-none",
-                  "label": "Flex For Mobile (d-flex d-md-none)"
-                },
-                {
-                  "value": "d-inline-block d-md-none",
-                  "label": "Inline Block For Mobile (d-inline-block d-md-none)"
-                },
-                {
-                  "value": "None",
-                  "label": "None"
-                }
-              ],
-              "default": "None"
-            },
-            {
-              "type": "select",
-              "id": "btn-size",
-              "label": "Button Size",
-              "options": [{
-                  "value": "btn-lg",
-                  "label": "Large button"
-                },
-                {
-                  "value": "btn-sm",
-                  "label": "Small button"
-                },
-                {
-                  "value": " ",
-                  "label": "Default"
-                }
-              ],
-              "default": " "
-            },
-            {
-              "type": "select",
-              "id": "btn-color",
-              "label": "Button Theme",
-              "options": [{
-                  "value": "btn-sm-primary",
-                  "label": "SmallHD Yellow"
-                },
-                {
-                  "value": "btn-td-primary",
-                  "label": "Teradek Orange"
-                },
-                {
-                  "value": "btn-wc-primary",
-                  "label": "Wooden Camera Blue"
-                },
-                {
-                  "value": "btn-purple",
-                  "label": "Button Purple "
-                },
-                {
-                    "value": "btn-td-blue",
-                    "label": "Button TD Blue"
-                },
-                {
-                  "value": "btn-black",
-                  "label": "Button Black"
-                },
-                {
-                  "value": "btn-white",
-                  "label": "Button White"
-                },
-                {
-                  "value": "btn-gray",
-                  "label": "Button Gray"
-                },
-                {
-                  "value": "btn-outline-sm-primary",
-                  "label": "SmallHD Outline Yellow"
-                },
-                {
-                  "value": "btn-outline-td-primary",
-                  "label": "Teradek Outline Orange"
-                },
-                {
-                  "value": "btn-outline-wc-primary",
-                  "label": "Wooden Camera Outlne Blue"
-                },
-                {
-                  "value": "btn-outline-purple",
-                  "label": "Button Outline Purple"
-                },
-                {
-                    "value": "btn-outline-td-blue",
-                    "label": "Button Outline TD Blue"
-                },
-                {
-                  "value": "btn-outline-black",
-                  "label": "Button Outline Black"
-                },
-                {
-                  "value": "btn-outline-white",
-                  "label": "Button outline White"
-                },
-                {
-                  "value": "btn-outline-gray",
-                  "label": "Button Outline Gray"
-                }
-              ],
-              "default": "btn-td-primary"
-            },
-            {
-              "type": "url",
-              "id": "btn-link",
-              "label": "Button Link"
-            },
-            {
-              "type": "text",
-              "id": "modalTarget",
-              "label": "Add same Id which you used in Modal"
-            }
-          ]
-        },
-        {
-          "type": "modal",
-          "name": "Modal Block",
-          "settings": [{
-              "type": "text",
-              "id": "modalId",
-              "label": "Modal ID"
-            },
-            {
-              "type": "select",
-              "id": "modalSize",
-              "label": "Modal Size",
-              "options": [{
-                  "value": "modal-xl",
-                  "label": "Modal xl"
-                },
-                {
-                  "value": "modal-lg",
-                  "label": "Modal Lg"
-                },
-                {
-                  "value": "modal-sm",
-                  "label": "Modal Sm"
-                },
-                {
-                  "value": "",
-                  "label": "Modal Default"
-                }
-              ],
-              "default": ""
-            },
-            {
-              "id": "responsiveClass",
-              "type": "select",
-              "label": "Display",
-              "options": [{
-                  "value": "d-none",
-                  "label": "Always Hide (d-none)"
-                },
-                {
-                  "value": "d-block",
-                  "label": "Always Show (d-block)"
-                },
-                {
-                  "value": "d-none d-md-block",
-                  "label": "Desktop (d-none d-md-block)"
-                },
-                {
-                  "value": "d-none d-md-flex",
-                  "label": "Flex For Desktop (d-none d-md-flex)"
-                },
-                {
-                  "value": "d-none d-md-inline-block",
-                  "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
-                },
-                {
-                  "value": "d-block d-md-none",
-                  "label": "Only Mobile (d-block d-md-none)"
-                },
-                {
-                  "value": "d-flex d-md-none",
-                  "label": "Flex For Mobile (d-flex d-md-none)"
-                },
-                {
-                  "value": "d-inline-block d-md-none",
-                  "label": "Inline Block For Mobile (d-inline-block d-md-none)"
-                },
-                {
-                  "value": "None",
-                  "label": "None"
-                }
-              ],
-              "default": "None"
-            },
-            {
-              "type": "checkbox",
-              "id": "contactModal",
-              "label": "Active Content Modal"
-            },
-            {
-              "type": "checkbox",
-              "id": "videoModal",
-              "label": "Active Video Modal"
-            },
-            {
-              "type": "text",
-              "id": "video-id",
-              "label": "Add video ID For Video Pause When Modal Close"
-            },
-            {
-              "type": "text",
-              "id": "iframeUrl",
-              "label": "Iframe Source"
-            },
-            {
-              "type": "text",
-              "id": "controls",
-              "label": "Video Control settings 0 or 1"
-            },
-            {
-              "type": "text",
-              "id": "loop",
-              "label": "Video Loop settings 0 or 1"
-            },
-            {
-              "type": "text",
-              "id": "autoplay",
-              "label": "Video Autoplay settings 0 or 1"
-            },
-            {
-              "type": "text",
-              "id": "mute",
-              "label": "Video Mute settings 0 or 1"
-            },
-            {
-              "type": "text",
-              "id": "iframeClass",
-              "label": "Iframe Class"
-            },
-            {
-              "type": "text",
-              "id": "iframeHeight",
-              "label": "Iframe Height"
-            }
-          ]
-        },
-        {
-          "type": "customHtml",
-          "name": "Custom HTML",
-          "settings": [{
-            "type": "html",
-            "id": "customHtml",
-            "label": "Add Custom Markup Here"
-          }]
-        },
-        {
-          "type": "inlineVideo",
-          "name": "Inline Video",
-          "settings": [{
-              "type": "text",
-              "id": "videoOuterClass",
-              "label": "Video Ratio Class"
-            },
-            {
-              "id": "responsiveClass",
-              "type": "select",
-              "label": "Display",
-              "options": [{
-                  "value": "d-none",
-                  "label": "Always Hide (d-none)"
-                },
-                {
-                  "value": "d-block",
-                  "label": "Always Show (d-block)"
-                },
-                {
-                  "value": "d-none d-md-block",
-                  "label": "Desktop (d-none d-md-block)"
-                },
-                {
-                  "value": "d-none d-md-flex",
-                  "label": "Flex For Desktop (d-none d-md-flex)"
-                },
-                {
-                  "value": "d-none d-md-inline-block",
-                  "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
-                },
-                {
-                  "value": "d-block d-md-none",
-                  "label": "Only Mobile (d-block d-md-none)"
-                },
-                {
-                  "value": "d-flex d-md-none",
-                  "label": "Flex For Mobile (d-flex d-md-none)"
-                },
-                {
-                  "value": "d-inline-block d-md-none",
-                  "label": "Inline Block For Mobile (d-inline-block d-md-none)"
-                },
-                {
-                  "value": "None",
-                  "label": "None"
-                }
-              ],
-              "default": "None"
-            },
-            {
-              "type": "text",
-              "id": "inline-video-url",
-              "label": "Video URL"
-            },
-            {
-              "type": "text",
-              "id": "inline-video-title",
-              "label": "Video Title"
-            }
-          ]
-        },
-        {
-          "type": "video_overlay",
-          "name": "Video overlay",
-          "settings": [{
-              "id": "uuid",
-              "type": "text",
-              "label": "Unique ID"
-            },
-            {
-              "id": "bg_image",
-              "type": "image_picker",
-              "label": "BG Image"
-            },
-            {
-              "id": "bg_image_width",
-              "type": "text",
-              "label": "BG Image Width"
-            },
-            {
-              "id": "bg_image_mobile",
-              "type": "image_picker",
-              "label": "BG Image Mobile"
-            },
-            {
-              "id": "bg_image_width_mobile",
-              "type": "text",
-              "label": "BG Image W Mobile"
-            },
-            {
-              "id": "video-Width",
-              "type": "text",
-              "label": "Video container Width"
-            },
-            {
-              "id": "video_url",
-              "type": "text",
-              "label": "Video URL"
-            },
-            {
-              "type": "text",
-              "id": "controls",
-              "label": "Video Control settings 0 or 1"
-            },
-            {
-              "type": "text",
-              "id": "loop",
-              "label": "Video Loop settings 0 or 1"
-            },
-            {
-              "type": "text",
-              "id": "autoplay",
-              "label": "Video Autoplay settings 0 or 1"
-            },
-            {
-              "type": "text",
-              "id": "autopause",
-              "label": "Video Autopause settings 0 or 1"
-            },
-            {
-              "type": "text",
-              "id": "mute",
-              "label": "Video Mute settings 0 or 1"
-            },
-            {
-              "id": "video_title",
-              "type": "text",
-              "label": "Video Title"
-            },
-            {
-              "id": "video_top",
-              "type": "text",
-              "label": "Video Top"
-    
-            },
-            {
-              "id": "video_left",
-              "type": "text",
-              "label": "Video Left"
-    
-            },
-            {
-              "id": "video_right",
-              "type": "text",
-              "label": "Video Right"
-    
-            },
-            {
-              "id": "video_bottom",
-              "type": "text",
-              "label": "Video Bottom"
-    
-            },
-            {
-              "id": "video_width",
-              "type": "text",
-              "label": "Video Width"
-    
-            }, {
-              "id": "video_top_m",
-              "type": "text",
-              "label": "Mobile Video Top"
-    
-            },
-            {
-              "id": "video_left_m",
-              "type": "text",
-              "label": "Mobile Video Left"
-    
-            },
-            {
-              "id": "video_right_m",
-              "type": "text",
-              "label": "Mobile Video Right"
-    
-            },
-            {
-              "id": "video_bottom_m",
-              "type": "text",
-              "label": "Mobile Video Bottom"
-    
-            },
-            {
-              "id": "video_width_m",
-              "type": "text",
-              "label": "Mobile Video Width"
-    
-            }
-          ]
-        },
-        {
-          "type": "video_button",
-          "name": "Video Player Button",
-          "settings": [{
-              "id": "uuid",
-              "type": "text",
-              "label": "Unique ID"
-            },
-            {
-              "id": "video_button_graphic",
-              "type": "text",
-              "label": "Video Button Graphic",
-              "default": "https://i.shgcdn.com/b619bc49-47d0-40a0-bbde-aaefdc7a6612/-/format/auto/-/preview/3000x3000/-/quality/lighter/"
-            },
-            {
-              "id": "video_button_classes",
-              "type": "text",
-              "label": "Video Button Classes"
-            },
-            {
-              "id": "responsiveClass",
-              "type": "select",
-              "label": "Display",
-              "options": [{
-                  "value": "d-none",
-                  "label": "Always Hide (d-none)"
-                },
-                {
-                  "value": "d-block",
-                  "label": "Always Show (d-block)"
-                },
-                {
-                  "value": "d-none d-md-block",
-                  "label": "Desktop (d-none d-md-block)"
-                },
-                {
-                  "value": "d-none d-md-flex",
-                  "label": "Flex For Desktop (d-none d-md-flex)"
-                },
-                {
-                  "value": "d-none d-md-inline-block",
-                  "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
-                },
-                {
-                  "value": "d-block d-md-none",
-                  "label": "Only Mobile (d-block d-md-none)"
-                },
-                {
-                  "value": "d-flex d-md-none",
-                  "label": "Flex For Mobile (d-flex d-md-none)"
-                },
-                {
-                  "value": "d-inline-block d-md-none",
-                  "label": "Inline Block For Mobile (d-inline-block d-md-none)"
-                },
-                {
-                  "value": "None",
-                  "label": "None"
-                }
-              ],
-              "default": "None"
-            },
-            {
-              "id": "video_button_target",
-              "type": "text",
-              "label": "Video Button Target"
-            },
-            {
-              "id": "video_button_color",
-              "type": "color",
-              "label": "Button Color"
-            },
-            {
-              "id": "video_button_text_color",
-              "type": "color",
-              "label": "Text Color"
-            },
-            {
-              "id": "video_button_text",
-              "type": "text",
-              "label": "Video CTA Text",
-              "default": "Put button text here"
-            }
-          ]
-        },
-        {
-          "type": "video_static",
-          "name": "Video Player Static",
-          "settings": [{
-              "id": "uuid",
-              "type": "text",
-              "label": "Text Unique ID"
-            },
-            {
-              "id": "video_img_url",
-              "type": "text",
-              "label": "Video Target"
-            },
-            {
-              "id": "video_player_static_classes",
-              "type": "text",
-              "label": "Video Player Classes"
-            },
-            {
-              "id": "responsiveClass",
-              "type": "select",
-              "label": "Display",
-              "options": [{
-                  "value": "d-none",
-                  "label": "Always Hide (d-none)"
-                },
-                {
-                  "value": "d-block",
-                  "label": "Always Show (d-block)"
-                },
-                {
-                  "value": "d-none d-md-block",
-                  "label": "Desktop (d-none d-md-block)"
-                },
-                {
-                  "value": "d-none d-md-flex",
-                  "label": "Flex For Desktop (d-none d-md-flex)"
-                },
-                {
-                  "value": "d-none d-md-inline-block",
-                  "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
-                },
-                {
-                  "value": "d-block d-md-none",
-                  "label": "Only Mobile (d-block d-md-none)"
-                },
-                {
-                  "value": "d-flex d-md-none",
-                  "label": "Flex For Mobile (d-flex d-md-none)"
-                },
-                {
-                  "value": "d-inline-block d-md-none",
-                  "label": "Inline Block For Mobile (d-inline-block d-md-none)"
-                },
-                {
-                  "value": "None",
-                  "label": "None"
-                }
-              ],
-              "default": "None"
-            },
-            {
-              "id": "video_img_off",
-              "type": "image_picker",
-              "label": "Video Image Off"
-            },
-            {
-              "id": "video_img_over",
-              "type": "image_picker",
-              "label": "Video Image Over"
-            }
-          ]
-        },
-        {
-          "type": "numpositionBlock",
-          "name": "Num. Overlay",
-          "settings": [{
-              "type": "text",
-              "id": "positionClasses",
-              "label": "Overlay Class"
-            },
-            {
-              "type": "text",
-              "id": "textClass",
-              "label": "Text Class"
-            },
-            {
-              "type": "text",
-              "id": "textText",
-              "label": "Enter Text"
-            },
-            {
-              "type": "text",
-              "id": "popupoverText",
-              "label": "Popupover Text"
-            },
-            {
-              "id": "responsiveClass",
-              "type": "select",
-              "label": "Display",
-              "options": [{
-                  "value": "d-none",
-                  "label": "Always Hide (d-none)"
-                },
-                {
-                  "value": "d-block",
-                  "label": "Always Show (d-block)"
-                },
-                {
-                  "value": "d-none d-md-block",
-                  "label": "Desktop (d-none d-md-block)"
-                },
-                {
-                  "value": "d-none d-md-flex",
-                  "label": "Flex For Desktop (d-none d-md-flex)"
-                },
-                {
-                  "value": "d-none d-md-inline-block",
-                  "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
-                },
-                {
-                  "value": "d-block d-md-none",
-                  "label": "Only Mobile (d-block d-md-none)"
-                },
-                {
-                  "value": "d-flex d-md-none",
-                  "label": "Flex For Mobile (d-flex d-md-none)"
-                },
-                {
-                  "value": "d-inline-block d-md-none",
-                  "label": "Inline Block For Mobile (d-inline-block d-md-none)"
-                },
-                {
-                  "value": "None",
-                  "label": "None"
-                }
-              ],
-              "default": "None"
-            },
-            {
-              "type": "text",
-              "id": "popupoverWidth",
-              "label": "Circle Width in (em)"
-            },
-            {
-              "type": "text",
-              "id": "popupoverHeight",
-              "label": "Circle Height in (em)"
-            },
-            {
-              "type": "text",
-              "id": "popupoverLineHeight",
-              "label": "Inner Text Line Height in (rem)"
-            },
-            {
-              "type": "text",
-              "id": "topPosition",
-              "label": "Position Top"
-            },
-            {
-              "type": "text",
-              "id": "leftPosition",
-              "label": "Position Left"
-            },
-            {
-              "type": "text",
-              "id": "rightPosition",
-              "label": "Position Right"
-            },
-            {
-              "type": "text",
-              "id": "bottomPosition",
-              "label": "Position Bottom"
-            },
-            {
-              "type": "color",
-              "id": "bgColor",
-              "label": "Background Color"
-            },
-            {
-              "type": "text",
-              "id": "mobtextText",
-              "label": "Enter Mobile Text"
-            },
-            {
-              "type": "text",
-              "id": "mobtextClass",
-              "label": "Text Class for Mobile"
-            },
-            {
-              "type": "text",
-              "id": "mobpopupoverWidth",
-              "label": "Mobile Circle Width in (em)"
-            },
-            {
-              "type": "text",
-              "id": "mobpopupoverHeight",
-              "label": "Mobile Circle Height in (em)"
-            },
-            {
-              "type": "text",
-              "id": "mobpopupoverLineHeight",
-              "label": "Mobile Inner Text Line Height in (rem)"
-            },
-            {
-              "type": "color",
-              "id": "mobbgColor",
-              "label": "Mobile Background Color"
-            },
-            {
-              "type": "text",
-              "id": "mobtopPosition",
-              "label": "Position Mobile Top"
-            },
-            {
-              "type": "text",
-              "id": "mobleftPosition",
-              "label": "Position Mobile Left"
-            },
-            {
-              "type": "text",
-              "id": "mobrightPosition",
-              "label": "Position Mobile Right"
-            },
-            {
-              "type": "text",
-              "id": "mobbottomPosition",
-              "label": "Position Mobile Bottom"
-            },
-            {
-              "type": "liquid",
-              "id": "customHTML",
-              "label": "Custom Markup"
-            }
-          ]
-        },
-        {
-          "type": "startcarouselBlock",
-          "name": "Start Carousel",
-          "settings": [{
-              "type": "text",
-              "id": "carouselId",
-              "label": "Carousel ID"
-            },
-            {
-              "type": "text",
-              "id": "carouselClass",
-              "label": "Carousel Class"
-            }
-          ]
-        },
-        {
-          "type": "startcaroselIndicators",
-          "name": "Start Carousel Indicators",
-          "settings": [
+          },
           {
+              "type": "text",
+              "id": "customfontmobo",
+              "label": "Custom font-size for Mobile"
+          },
+          {
+            "id": "responsiveClass",
+            "type": "select",
+            "label": "Display Class",
+            "options": [{
+                "value": "d-none",
+                "label": "Always Hide (d-none)"
+              },
+              {
+                "value": "d-block",
+                "label": "Always Show (d-block)"
+              },
+              {
+                "value": "d-none d-md-block",
+                "label": "Desktop (d-none d-md-block)"
+              },
+              {
+                "value": "d-none d-md-flex",
+                "label": "Flex For Desktop (d-none d-md-flex)"
+              },
+              {
+                "value": "d-none d-md-inline-block",
+                "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
+              },
+              {
+                "value": "d-block d-md-none",
+                "label": "Only Mobile (d-block d-md-none)"
+              },
+              {
+                "value": "d-flex d-md-none",
+                "label": "Flex For Mobile (d-flex d-md-none)"
+              },
+              {
+                "value": "d-inline-block d-md-none",
+                "label": "Inline Block For Mobile (d-inline-block d-md-none)"
+              },
+              {
+                "value": "None",
+                "label": "None"
+              }
+            ],
+            "default": "None"
+          }
+        ]
+      },
+      {
+        "type": "list-col-start",
+        "name": "Start UL tag",
+        "settings": [{
+            "type": "text",
+            "id": "ul-class",
+            "label": "Ul Class"
+          },
+          {
+            "id": "responsiveClass",
+            "type": "select",
+            "label": "Display",
+            "options": [{
+                "value": "d-none",
+                "label": "Always Hide (d-none)"
+              },
+              {
+                "value": "d-block",
+                "label": "Always Show (d-block)"
+              },
+              {
+                "value": "d-none d-md-block",
+                "label": "Desktop (d-none d-md-block)"
+              },
+              {
+                "value": "d-none d-md-flex",
+                "label": "Flex For Desktop (d-none d-md-flex)"
+              },
+              {
+                "value": "d-none d-md-inline-block",
+                "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
+              },
+              {
+                "value": "d-block d-md-none",
+                "label": "Only Mobile (d-block d-md-none)"
+              },
+              {
+                "value": "d-flex d-md-none",
+                "label": "Flex For Mobile (d-flex d-md-none)"
+              },
+              {
+                "value": "d-inline-block d-md-none",
+                "label": "Inline Block For Mobile (d-inline-block d-md-none)"
+              },
+              {
+                "value": "None",
+                "label": "None"
+              }
+            ],
+            "default": "None"
+          }
+        ]
+      },
+      {
+        "type": "list-col",
+        "name": "List col",
+        "settings": [{
+            "type": "text",
+            "id": "li-class",
+            "label": "Li class"
+          },
+          {
+            "type": "html",
+            "id": "list",
+            "label": "Li Content"
+          },
+          {
+            "id": "responsiveClass",
+            "type": "select",
+            "label": "Display",
+            "options": [{
+                "value": "d-none",
+                "label": "Always Hide (d-none)"
+              },
+              {
+                "value": "d-block",
+                "label": "Always Show (d-block)"
+              },
+              {
+                "value": "d-none d-md-block",
+                "label": "Desktop (d-none d-md-block)"
+              },
+              {
+                "value": "d-none d-md-flex",
+                "label": "Flex For Desktop (d-none d-md-flex)"
+              },
+              {
+                "value": "d-none d-md-inline-block",
+                "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
+              },
+              {
+                "value": "d-block d-md-none",
+                "label": "Only Mobile (d-block d-md-none)"
+              },
+              {
+                "value": "d-flex d-md-none",
+                "label": "Flex For Mobile (d-flex d-md-none)"
+              },
+              {
+                "value": "d-inline-block d-md-none",
+                "label": "Inline Block For Mobile (d-inline-block d-md-none)"
+              },
+              {
+                "value": "None",
+                "label": "None"
+              }
+            ],
+            "default": "None"
+          }
+        ]
+      },
+      {
+        "type": "list-col-end",
+        "name": "End UL Tag"
+      },
+      {
+        "type": "rowstart",
+        "name": "Start Row",
+        "settings": [{
+            "type": "text",
+            "id": "row-class",
+            "label": "Row Class"
+          },
+          {
+            "id": "responsiveClass",
+            "type": "select",
+            "label": "Display",
+            "options": [{
+                "value": "d-none",
+                "label": "Always Hide (d-none)"
+              },
+              {
+                "value": "d-block",
+                "label": "Always Show (d-block)"
+              },
+              {
+                "value": "d-none d-md-block",
+                "label": "Desktop (d-none d-md-block)"
+              },
+              {
+                "value": "d-none d-md-flex",
+                "label": "Flex For Desktop (d-none d-md-flex)"
+              },
+              {
+                "value": "d-none d-md-inline-block",
+                "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
+              },
+              {
+                "value": "d-block d-md-none",
+                "label": "Only Mobile (d-block d-md-none)"
+              },
+              {
+                "value": "d-flex d-md-none",
+                "label": "Flex For Mobile (d-flex d-md-none)"
+              },
+              {
+                "value": "d-inline-block d-md-none",
+                "label": "Inline Block For Mobile (d-inline-block d-md-none)"
+              },
+              {
+                "value": "None",
+                "label": "None"
+              }
+            ],
+            "default": "None"
+          }
+        ]
+      },
+      {
+        "type": "rowend",
+        "name": "End Row",
+        "settings": [{
+          "type": "color",
+          "id": "row-end-color",
+          "label": "Bg Color"
+        }]
+      },
+      {
+        "type": "col-start",
+        "name": "Start Column",
+        "settings": [{
+            "type": "text",
+            "id": "col-class",
+            "label": "Col Class"
+          },
+          {
+            "type": "number",
+            "id": "colOrder",
+            "label": "Column Order"
+          },
+          {
+            "id": "responsiveClass",
+            "type": "select",
+            "label": "Display",
+            "options": [{
+                "value": "d-none",
+                "label": "Always Hide (d-none)"
+              },
+              {
+                "value": "d-block",
+                "label": "Always Show (d-block)"
+              },
+              {
+                "value": "d-none d-md-block",
+                "label": "Desktop (d-none d-md-block)"
+              },
+              {
+                "value": "d-none d-md-flex",
+                "label": "Flex For Desktop (d-none d-md-flex)"
+              },
+              {
+                "value": "d-none d-md-inline-block",
+                "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
+              },
+              {
+                "value": "d-block d-md-none",
+                "label": "Only Mobile (d-block d-md-none)"
+              },
+              {
+                "value": "d-flex d-md-none",
+                "label": "Flex For Mobile (d-flex d-md-none)"
+              },
+              {
+                "value": "d-inline-block d-md-none",
+                "label": "Inline Block For Mobile (d-inline-block d-md-none)"
+              },
+              {
+                "value": "None",
+                "label": "None"
+              }
+            ],
+            "default": "None"
+          }
+        ]
+      },
+      {
+        "type": "col-end",
+        "name": "End Column",
+        "settings": [{
+          "type": "color",
+          "id": "col-end-color",
+          "label": "Bg Color"
+        }]
+      },
+      {
+        "type": "card",
+        "name": "Start Card",
+        "settings": [{
+            "type": "text",
+            "id": "cardClass",
+            "label": "Card Class"
+          },
+          {
+            "type": "select",
+            "id": "card-color",
+            "label": "Card Color",
+            "options": [{
+                "value": "text-bg-primary",
+                "label": "Primary (BS Blue)"
+              },
+              {
+                "value": "text-bg-secondary",
+                "label": "Secondary (BS Gray)"
+              },
+              {
+                "value": "text-bg-success",
+                "label": "Success (BS Green)"
+              },
+              {
+                "value": "text-bg-danger",
+                "label": "Danger (BS Red)"
+              },
+              {
+                "value": "text-bg-warning",
+                "label": "Warning (BS Yellow)"
+              },
+              {
+                "value": "text-bg-info",
+                "label": "Warning (BS Yellow)"
+              },
+              {
+                "value": "text-bg-light",
+                "label": "Light (BS Light Gray)"
+              },
+              {
+                "value": "text-bg-dark",
+                "label": "Dark (BS Dark Gray)"
+              },
+              {
+                "value": " ",
+                "label": "None"
+              }
+            ],
+            "default": " "
+          },
+          {
+            "type": "color_background",
+            "id": "cardBG",
+            "label": "Background Color"
+          },
+          {
+            "id": "responsiveClass",
+            "type": "select",
+            "label": "Display",
+            "options": [{
+                "value": "d-none",
+                "label": "Always Hide (d-none)"
+              },
+              {
+                "value": "d-block",
+                "label": "Always Show (d-block)"
+              },
+              {
+                "value": "d-none d-md-block",
+                "label": "Desktop (d-none d-md-block)"
+              },
+              {
+                "value": "d-none d-md-flex",
+                "label": "Flex For Desktop (d-none d-md-flex)"
+              },
+              {
+                "value": "d-none d-md-inline-block",
+                "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
+              },
+              {
+                "value": "d-block d-md-none",
+                "label": "Only Mobile (d-block d-md-none)"
+              },
+              {
+                "value": "d-flex d-md-none",
+                "label": "Flex For Mobile (d-flex d-md-none)"
+              },
+              {
+                "value": "d-inline-block d-md-none",
+                "label": "Inline Block For Mobile (d-inline-block d-md-none)"
+              },
+              {
+                "value": "None",
+                "label": "None"
+              }
+            ],
+            "default": "None"
+          }
+        ]
+      },
+      {
+        "type": "cardBody",
+        "name": "Start Card Body",
+        "settings": [{
+          "type": "text",
+          "id": "cardBodyClass",
+          "label": "Card Body Class"
+        }]
+      },
+      {
+        "type": "cardBodyEnd",
+        "name": "End Card Body"
+      },
+      {
+        "type": "card-end",
+        "name": "End Card"
+      },
+      {
+        "type": "imageBlock",
+        "name": "Image Block",
+        "settings": [{
+            "type": "text",
+            "id": "img-unique",
+            "label": "Add Unique ID for image width"
+          },
+          {
+            "id": "imageUrl",
+            "label": "Select Image",
+            "type": "image_picker"
+          },
+          {
+            "id": "imageUrlLink",
+            "type": "url",
+            "label": "Image Url Link"
+          },
+          {
+            "id": "imageClass",
+            "type": "text",
+            "label": "Image Class"
+          },
+          {
+            "id": "imgWidth",
+            "type": "text",
+            "label": "Image width in (em)"
+          },
+          {
+            "id": "mobimageUrl",
+            "label": "Select Mobile Image",
+            "type": "image_picker"
+          },
+          {
+            "id": "mobimageUrlLink",
+            "type": "url",
+            "label": "Mobile Image Url Link"
+          },
+          {
+            "id": "mobimgWidth",
+            "type": "text",
+            "label": "Mobile Image width in (em)"
+          },
+          {
+            "id": "responsiveClass",
+            "type": "select",
+            "label": "Display",
+            "options": [{
+                "value": "d-none",
+                "label": "Always Hide (d-none)"
+              },
+              {
+                "value": "d-block",
+                "label": "Always Show (d-block)"
+              },
+              {
+                "value": "d-none d-md-block",
+                "label": "Desktop (d-none d-md-block)"
+              },
+              {
+                "value": "d-none d-md-flex",
+                "label": "Flex For Desktop (d-none d-md-flex)"
+              },
+              {
+                "value": "d-none d-md-inline-block",
+                "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
+              },
+              {
+                "value": "d-block d-md-none",
+                "label": "Only Mobile (d-block d-md-none)"
+              },
+              {
+                "value": "d-flex d-md-none",
+                "label": "Flex For Mobile (d-flex d-md-none)"
+              },
+              {
+                "value": "d-inline-block d-md-none",
+                "label": "Inline Block For Mobile (d-inline-block d-md-none)"
+              },
+              {
+                "value": "None",
+                "label": "None"
+              }
+            ],
+            "default": "None"
+          }
+        ]
+      },
+      {
+        "type": "btn",
+        "name": "Button",
+        "settings": [{
+            "type": "text",
+            "id": "btn-text",
+            "label": "Button Text"
+          },
+          {
+            "type": "text",
+            "id": "btn-class",
+            "label": "Button Class"
+          },
+          {
+            "id": "responsiveClass",
+            "type": "select",
+            "label": "Display",
+            "options": [{
+                "value": "d-none",
+                "label": "Always Hide (d-none)"
+              },
+              {
+                "value": "d-block",
+                "label": "Always Show (d-block)"
+              },
+              {
+                "value": "d-none d-md-block",
+                "label": "Desktop (d-none d-md-block)"
+              },
+              {
+                "value": "d-none d-md-flex",
+                "label": "Flex For Desktop (d-none d-md-flex)"
+              },
+              {
+                "value": "d-none d-md-inline-block",
+                "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
+              },
+              {
+                "value": "d-block d-md-none",
+                "label": "Only Mobile (d-block d-md-none)"
+              },
+              {
+                "value": "d-flex d-md-none",
+                "label": "Flex For Mobile (d-flex d-md-none)"
+              },
+              {
+                "value": "d-inline-block d-md-none",
+                "label": "Inline Block For Mobile (d-inline-block d-md-none)"
+              },
+              {
+                "value": "None",
+                "label": "None"
+              }
+            ],
+            "default": "None"
+          },
+          {
+            "type": "select",
+            "id": "btn-size",
+            "label": "Button Size",
+            "options": [{
+                "value": "btn-lg",
+                "label": "Large button"
+              },
+              {
+                "value": "btn-sm",
+                "label": "Small button"
+              },
+              {
+                "value": " ",
+                "label": "Default"
+              }
+            ],
+            "default": " "
+          },
+          {
+            "type": "select",
+            "id": "btn-color",
+            "label": "Button Theme",
+            "options": [{
+                "value": "btn-sm-primary",
+                "label": "SmallHD Yellow"
+              },
+              {
+                "value": "btn-td-primary",
+                "label": "Teradek Orange"
+              },
+              {
+                "value": "btn-wc-primary",
+                "label": "Wooden Camera Blue"
+              },
+              {
+                "value": "btn-purple",
+                "label": "Button Purple "
+              },
+              {
+                  "value": "btn-td-blue",
+                  "label": "Button TD Blue"
+              },
+              {
+                "value": "btn-black",
+                "label": "Button Black"
+              },
+              {
+                "value": "btn-white",
+                "label": "Button White"
+              },
+              {
+                "value": "btn-gray",
+                "label": "Button Gray"
+              },
+              {
+                "value": "btn-outline-sm-primary",
+                "label": "SmallHD Outline Yellow"
+              },
+              {
+                "value": "btn-outline-td-primary",
+                "label": "Teradek Outline Orange"
+              },
+              {
+                "value": "btn-outline-wc-primary",
+                "label": "Wooden Camera Outlne Blue"
+              },
+              {
+                "value": "btn-outline-purple",
+                "label": "Button Outline Purple"
+              },
+              {
+                  "value": "btn-outline-td-blue",
+                  "label": "Button Outline TD Blue"
+              },
+              {
+                "value": "btn-outline-black",
+                "label": "Button Outline Black"
+              },
+              {
+                "value": "btn-outline-white",
+                "label": "Button outline White"
+              },
+              {
+                "value": "btn-outline-gray",
+                "label": "Button Outline Gray"
+              }
+            ],
+            "default": "btn-td-primary"
+          },
+          {
+            "type": "url",
+            "id": "btn-link",
+            "label": "Button Link"
+          },
+          {
+            "type": "text",
+            "id": "modalTarget",
+            "label": "Add same Id which you used in Modal"
+          }
+        ]
+      },
+      {
+        "type": "modal",
+        "name": "Modal Block",
+        "settings": [{
+            "type": "text",
+            "id": "modalId",
+            "label": "Modal ID"
+          },
+          {
+            "type": "select",
+            "id": "modalSize",
+            "label": "Modal Size",
+            "options": [{
+                "value": "modal-xl",
+                "label": "Modal xl"
+              },
+              {
+                "value": "modal-lg",
+                "label": "Modal Lg"
+              },
+              {
+                "value": "modal-sm",
+                "label": "Modal Sm"
+              },
+              {
+                "value": "",
+                "label": "Modal Default"
+              }
+            ],
+            "default": ""
+          },
+          {
+            "id": "responsiveClass",
+            "type": "select",
+            "label": "Display",
+            "options": [{
+                "value": "d-none",
+                "label": "Always Hide (d-none)"
+              },
+              {
+                "value": "d-block",
+                "label": "Always Show (d-block)"
+              },
+              {
+                "value": "d-none d-md-block",
+                "label": "Desktop (d-none d-md-block)"
+              },
+              {
+                "value": "d-none d-md-flex",
+                "label": "Flex For Desktop (d-none d-md-flex)"
+              },
+              {
+                "value": "d-none d-md-inline-block",
+                "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
+              },
+              {
+                "value": "d-block d-md-none",
+                "label": "Only Mobile (d-block d-md-none)"
+              },
+              {
+                "value": "d-flex d-md-none",
+                "label": "Flex For Mobile (d-flex d-md-none)"
+              },
+              {
+                "value": "d-inline-block d-md-none",
+                "label": "Inline Block For Mobile (d-inline-block d-md-none)"
+              },
+              {
+                "value": "None",
+                "label": "None"
+              }
+            ],
+            "default": "None"
+          },
+          {
+            "type": "checkbox",
+            "id": "contactModal",
+            "label": "Active Content Modal"
+          },
+          {
+            "type": "checkbox",
+            "id": "videoModal",
+            "label": "Active Video Modal"
+          },
+          {
+            "type": "text",
+            "id": "video-id",
+            "label": "Add video ID For Video Pause When Modal Close"
+          },
+          {
+            "type": "text",
+            "id": "iframeUrl",
+            "label": "Iframe Source"
+          },
+          {
+            "type": "text",
+            "id": "controls",
+            "label": "Video Control settings 0 or 1"
+          },
+          {
+            "type": "text",
+            "id": "loop",
+            "label": "Video Loop settings 0 or 1"
+          },
+          {
+            "type": "text",
+            "id": "autoplay",
+            "label": "Video Autoplay settings 0 or 1"
+          },
+          {
+            "type": "text",
+            "id": "mute",
+            "label": "Video Mute settings 0 or 1"
+          },
+          {
+            "type": "text",
+            "id": "iframeClass",
+            "label": "Iframe Class"
+          },
+          {
+            "type": "text",
+            "id": "iframeHeight",
+            "label": "Iframe Height"
+          }
+        ]
+      },
+      {
+        "type": "customHtml",
+        "name": "Custom HTML",
+        "settings": [{
+          "type": "html",
+          "id": "customHtml",
+          "label": "Add Custom Markup Here"
+        }]
+      },
+      {
+        "type": "customLiquid",
+        "name": "Custom Liquid",
+        "settings": [{
+          "type": "liquid",
+          "id": "customLiquid",
+          "label": "Add Custom Liquid Markup Here"
+        }]
+      },
+      {
+        "type": "inlineVideo",
+        "name": "Inline Video",
+        "settings": [{
+            "type": "text",
+            "id": "videoOuterClass",
+            "label": "Video Ratio Class"
+          },
+          {
+            "id": "responsiveClass",
+            "type": "select",
+            "label": "Display",
+            "options": [{
+                "value": "d-none",
+                "label": "Always Hide (d-none)"
+              },
+              {
+                "value": "d-block",
+                "label": "Always Show (d-block)"
+              },
+              {
+                "value": "d-none d-md-block",
+                "label": "Desktop (d-none d-md-block)"
+              },
+              {
+                "value": "d-none d-md-flex",
+                "label": "Flex For Desktop (d-none d-md-flex)"
+              },
+              {
+                "value": "d-none d-md-inline-block",
+                "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
+              },
+              {
+                "value": "d-block d-md-none",
+                "label": "Only Mobile (d-block d-md-none)"
+              },
+              {
+                "value": "d-flex d-md-none",
+                "label": "Flex For Mobile (d-flex d-md-none)"
+              },
+              {
+                "value": "d-inline-block d-md-none",
+                "label": "Inline Block For Mobile (d-inline-block d-md-none)"
+              },
+              {
+                "value": "None",
+                "label": "None"
+              }
+            ],
+            "default": "None"
+          },
+          {
+            "type": "text",
+            "id": "inline-video-url",
+            "label": "Video URL"
+          },
+          {
+            "type": "text",
+            "id": "inline-video-title",
+            "label": "Video Title"
+          }
+        ]
+      },
+      {
+        "type": "video_overlay",
+        "name": "Video overlay",
+        "settings": [{
+            "id": "uuid",
+            "type": "text",
+            "label": "Unique ID"
+          },
+          {
+            "id": "bg_image",
+            "type": "image_picker",
+            "label": "BG Image"
+          },
+          {
+            "id": "bg_image_width",
+            "type": "text",
+            "label": "BG Image Width"
+          },
+          {
+            "id": "bg_image_mobile",
+            "type": "image_picker",
+            "label": "BG Image Mobile"
+          },
+          {
+            "id": "bg_image_width_mobile",
+            "type": "text",
+            "label": "BG Image W Mobile"
+          },
+          {
+            "id": "video-Width",
+            "type": "text",
+            "label": "Video container Width"
+          },
+          {
+            "id": "video_url",
+            "type": "text",
+            "label": "Video URL"
+          },
+          {
+            "type": "text",
+            "id": "controls",
+            "label": "Video Control settings 0 or 1"
+          },
+          {
+            "type": "text",
+            "id": "loop",
+            "label": "Video Loop settings 0 or 1"
+          },
+          {
+            "type": "text",
+            "id": "autoplay",
+            "label": "Video Autoplay settings 0 or 1"
+          },
+          {
+            "type": "text",
+            "id": "autopause",
+            "label": "Video Autopause settings 0 or 1"
+          },
+          {
+            "type": "text",
+            "id": "mute",
+            "label": "Video Mute settings 0 or 1"
+          },
+          {
+            "id": "video_title",
+            "type": "text",
+            "label": "Video Title"
+          },
+          {
+            "id": "video_top",
+            "type": "text",
+            "label": "Video Top"
+
+          },
+          {
+            "id": "video_left",
+            "type": "text",
+            "label": "Video Left"
+
+          },
+          {
+            "id": "video_right",
+            "type": "text",
+            "label": "Video Right"
+
+          },
+          {
+            "id": "video_bottom",
+            "type": "text",
+            "label": "Video Bottom"
+
+          },
+          {
+            "id": "video_width",
+            "type": "text",
+            "label": "Video Width"
+
+          }, {
+            "id": "video_top_m",
+            "type": "text",
+            "label": "Mobile Video Top"
+
+          },
+          {
+            "id": "video_left_m",
+            "type": "text",
+            "label": "Mobile Video Left"
+
+          },
+          {
+            "id": "video_right_m",
+            "type": "text",
+            "label": "Mobile Video Right"
+
+          },
+          {
+            "id": "video_bottom_m",
+            "type": "text",
+            "label": "Mobile Video Bottom"
+
+          },
+          {
+            "id": "video_width_m",
+            "type": "text",
+            "label": "Mobile Video Width"
+
+          }
+        ]
+      },
+      {
+        "type": "video_button",
+        "name": "Video Player Button",
+        "settings": [{
+            "id": "uuid",
+            "type": "text",
+            "label": "Unique ID"
+          },
+          {
+            "id": "video_button_graphic",
+            "type": "text",
+            "label": "Video Button Graphic",
+            "default": "https://i.shgcdn.com/b619bc49-47d0-40a0-bbde-aaefdc7a6612/-/format/auto/-/preview/3000x3000/-/quality/lighter/"
+          },
+          {
+            "id": "video_button_classes",
+            "type": "text",
+            "label": "Video Button Classes"
+          },
+          {
+            "id": "responsiveClass",
+            "type": "select",
+            "label": "Display",
+            "options": [{
+                "value": "d-none",
+                "label": "Always Hide (d-none)"
+              },
+              {
+                "value": "d-block",
+                "label": "Always Show (d-block)"
+              },
+              {
+                "value": "d-none d-md-block",
+                "label": "Desktop (d-none d-md-block)"
+              },
+              {
+                "value": "d-none d-md-flex",
+                "label": "Flex For Desktop (d-none d-md-flex)"
+              },
+              {
+                "value": "d-none d-md-inline-block",
+                "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
+              },
+              {
+                "value": "d-block d-md-none",
+                "label": "Only Mobile (d-block d-md-none)"
+              },
+              {
+                "value": "d-flex d-md-none",
+                "label": "Flex For Mobile (d-flex d-md-none)"
+              },
+              {
+                "value": "d-inline-block d-md-none",
+                "label": "Inline Block For Mobile (d-inline-block d-md-none)"
+              },
+              {
+                "value": "None",
+                "label": "None"
+              }
+            ],
+            "default": "None"
+          },
+          {
+            "id": "video_button_target",
+            "type": "text",
+            "label": "Video Button Target"
+          },
+          {
+            "id": "video_button_color",
+            "type": "color",
+            "label": "Button Color"
+          },
+          {
+            "id": "video_button_text_color",
+            "type": "color",
+            "label": "Text Color"
+          },
+          {
+            "id": "video_button_text",
+            "type": "text",
+            "label": "Video CTA Text",
+            "default": "Put button text here"
+          }
+        ]
+      },
+      {
+        "type": "video_static",
+        "name": "Video Player Static",
+        "settings": [{
+            "id": "uuid",
+            "type": "text",
+            "label": "Text Unique ID"
+          },
+          {
+            "id": "video_img_url",
+            "type": "text",
+            "label": "Video Target"
+          },
+          {
+            "id": "video_player_static_classes",
+            "type": "text",
+            "label": "Video Player Classes"
+          },
+          {
+            "id": "responsiveClass",
+            "type": "select",
+            "label": "Display",
+            "options": [{
+                "value": "d-none",
+                "label": "Always Hide (d-none)"
+              },
+              {
+                "value": "d-block",
+                "label": "Always Show (d-block)"
+              },
+              {
+                "value": "d-none d-md-block",
+                "label": "Desktop (d-none d-md-block)"
+              },
+              {
+                "value": "d-none d-md-flex",
+                "label": "Flex For Desktop (d-none d-md-flex)"
+              },
+              {
+                "value": "d-none d-md-inline-block",
+                "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
+              },
+              {
+                "value": "d-block d-md-none",
+                "label": "Only Mobile (d-block d-md-none)"
+              },
+              {
+                "value": "d-flex d-md-none",
+                "label": "Flex For Mobile (d-flex d-md-none)"
+              },
+              {
+                "value": "d-inline-block d-md-none",
+                "label": "Inline Block For Mobile (d-inline-block d-md-none)"
+              },
+              {
+                "value": "None",
+                "label": "None"
+              }
+            ],
+            "default": "None"
+          },
+          {
+            "id": "video_img_off",
+            "type": "image_picker",
+            "label": "Video Image Off"
+          },
+          {
+            "id": "video_img_over",
+            "type": "image_picker",
+            "label": "Video Image Over"
+          }
+        ]
+      },
+      {
+        "type": "numpositionBlock",
+        "name": "Num. Overlay",
+        "settings": [{
+            "type": "text",
+            "id": "positionClasses",
+            "label": "Overlay Class"
+          },
+          {
+            "type": "text",
+            "id": "textClass",
+            "label": "Text Class"
+          },
+          {
+            "type": "text",
+            "id": "textText",
+            "label": "Enter Text"
+          },
+          {
+            "type": "text",
+            "id": "popupoverText",
+            "label": "Popupover Text"
+          },
+          {
+            "id": "responsiveClass",
+            "type": "select",
+            "label": "Display",
+            "options": [{
+                "value": "d-none",
+                "label": "Always Hide (d-none)"
+              },
+              {
+                "value": "d-block",
+                "label": "Always Show (d-block)"
+              },
+              {
+                "value": "d-none d-md-block",
+                "label": "Desktop (d-none d-md-block)"
+              },
+              {
+                "value": "d-none d-md-flex",
+                "label": "Flex For Desktop (d-none d-md-flex)"
+              },
+              {
+                "value": "d-none d-md-inline-block",
+                "label": "InlineBlock for Desktop(d-none d-md-inline-block)"
+              },
+              {
+                "value": "d-block d-md-none",
+                "label": "Only Mobile (d-block d-md-none)"
+              },
+              {
+                "value": "d-flex d-md-none",
+                "label": "Flex For Mobile (d-flex d-md-none)"
+              },
+              {
+                "value": "d-inline-block d-md-none",
+                "label": "Inline Block For Mobile (d-inline-block d-md-none)"
+              },
+              {
+                "value": "None",
+                "label": "None"
+              }
+            ],
+            "default": "None"
+          },
+          {
+            "type": "text",
+            "id": "popupoverWidth",
+            "label": "Circle Width in (em)"
+          },
+          {
+            "type": "text",
+            "id": "popupoverHeight",
+            "label": "Circle Height in (em)"
+          },
+          {
+            "type": "text",
+            "id": "popupoverLineHeight",
+            "label": "Inner Text Line Height in (rem)"
+          },
+          {
+            "type": "text",
+            "id": "topPosition",
+            "label": "Position Top"
+          },
+          {
+            "type": "text",
+            "id": "leftPosition",
+            "label": "Position Left"
+          },
+          {
+            "type": "text",
+            "id": "rightPosition",
+            "label": "Position Right"
+          },
+          {
+            "type": "text",
+            "id": "bottomPosition",
+            "label": "Position Bottom"
+          },
+          {
+            "type": "color",
+            "id": "bgColor",
+            "label": "Background Color"
+          },
+          {
+            "type": "text",
+            "id": "mobtextText",
+            "label": "Enter Mobile Text"
+          },
+          {
+            "type": "text",
+            "id": "mobtextClass",
+            "label": "Text Class for Mobile"
+          },
+          {
+            "type": "text",
+            "id": "mobpopupoverWidth",
+            "label": "Mobile Circle Width in (em)"
+          },
+          {
+            "type": "text",
+            "id": "mobpopupoverHeight",
+            "label": "Mobile Circle Height in (em)"
+          },
+          {
+            "type": "text",
+            "id": "mobpopupoverLineHeight",
+            "label": "Mobile Inner Text Line Height in (rem)"
+          },
+          {
+            "type": "color",
+            "id": "mobbgColor",
+            "label": "Mobile Background Color"
+          },
+          {
+            "type": "text",
+            "id": "mobtopPosition",
+            "label": "Position Mobile Top"
+          },
+          {
+            "type": "text",
+            "id": "mobleftPosition",
+            "label": "Position Mobile Left"
+          },
+          {
+            "type": "text",
+            "id": "mobrightPosition",
+            "label": "Position Mobile Right"
+          },
+          {
+            "type": "text",
+            "id": "mobbottomPosition",
+            "label": "Position Mobile Bottom"
+          },
+          {
+            "type": "liquid",
+            "id": "customHTML",
+            "label": "Custom Markup"
+          }
+        ]
+      },
+      {
+        "type": "startcarouselBlock",
+        "name": "Start Carousel",
+        "settings": [{
             "type": "text",
             "id": "carouselId",
-            "label": "Enter carouselId to set indicators position"
+            "label": "Carousel ID"
           },
           {
             "type": "text",
-            "id": "carouselindicatorsClass",
-            "label": "Carousel Indicator Extra Class"
-          },
-          {
-            "type": "text",
-            "id": "indicatorWidth",
-            "label": "Carousel Indicators Width"
-          },
-          {
-            "type": "text",
-            "id": "positionTop",
-            "label": "Top"
-          },
-          {
-            "type": "text",
-            "id": "positionBottom",
-            "label": "Bottom"
-          },
-          {
-            "type": "text",
-            "id": "positionLeft",
-            "label": "Left"
-          },
-          {
-            "type": "text",
-            "id": "positionRight",
-            "label": "Right"
+            "id": "carouselClass",
+            "label": "Carousel Class"
           }
-          ]
+        ]
+      },
+      {
+        "type": "startcarouselIndicators",
+        "name": "Start Carousel Indicators",
+        "settings": [
+        {
+          "type": "text",
+          "id": "carouselId",
+          "label": "Enter carouselId to set indicators position"
         },
         {
-          "type": "carouselindicatorsBtn",
-          "name": "Carousel Indicator Button",
-          "settings": [{
-              "type": "text",
-              "id": "carouselId",
-              "label": "Add Same ID which you used for carousel ID"
-            },
-            {
-              "type": "number",
-              "id": "slideNum",
-              "label": "Slide Number"
-            },
-            {
-              "type": "select",
-              "id": "indicatorsBtns",
-              "label": "Select Indicator Buttons",
-              "options": [
-                {
-                  "value": "Buttons",
-                  "label": "Buttons"
-                },
-                {
-                  "value": "Dots",
-                  "label": "Dots"
-                },
-                {
-                  "value": "Default indicators",
-                  "label": "Dash"
-                }
-              ],
-              "default": "Buttons"
-            },
-            {
-              "type": "text",
-              "id": "btnText",
-              "label": "Button Text"
-            },
-            {
-              "type": "select",
-              "id": "btn-size",
-              "label": "Button Size",
-              "options": [{
-                  "value": "btn-lg",
-                  "label": "Large button"
-                },
-                {
-                  "value": "btn-sm",
-                  "label": "Small button"
-                },
-                {
-                  "value": " ",
-                  "label": "Default"
-                }
-              ],
-              "default": " "
-            },
-            {
-              "type": "text",
-              "id": "btnClass",
-              "label": "Button Indicator Class"
-            },
-            {
-              "type": "color",
-              "id": "bgColor",
-              "label": "Buttons Background Color"
-            },
-            {
-              "type": "color",
-              "id": "activebgColor",
-              "label": "Button Active Background Color"
-            },
-            {
-              "type": "color",
-              "id": "btntextColor",
-              "label": "Button Text Color"
-            },
-            {
-              "type": "select",
-              "id": "arialabel",
-              "label": "Aria-label",
-              "options": [{
-                  "value": "slide 1",
-                  "label": "slide 1"
-                },
-                {
-                  "value": "slide 2",
-                  "label": "slide 2"
-                },
-                {
-                  "value": "slide 3",
-                  "label": "slide 3"
-                },
-                {
-                  "value": "slide 4",
-                  "label": "slide 4"
-                },
-                {
-                  "value": "slide 5",
-                  "label": "slide 5"
-                },
-                {
-                  "value": "slide 6",
-                  "label": "slide 6"
-                },
-                {
-                  "value": "slide 7",
-                  "label": "slide 7"
-                },
-                {
-                  "value": "slide 8",
-                  "label": "slide 8"
-                },
-                {
-                  "value": "slide 9",
-                  "label": "slide 9"
-                },
-                {
-                  "value": "slide 10",
-                  "label": "slide 10"
-                }
-              ]
-            },
-            {
-              "type": "text",
-              "id": "aria-current",
-              "label": "Aria Current"
-            }
-          ]
+          "type": "text",
+          "id": "carouselindicatorsClass",
+          "label": "Carousel Indicator Extra Class"
         },
         {
-          "type": "endcarouselIndicator",
-          "name": "End Carousel Indicators"
+          "type": "text",
+          "id": "indicatorWidth",
+          "label": "Carousel Indicators Width"
         },
         {
-          "type": "startCarousel-inner",
-          "name": "Start Carousel Inner",
-          "settings": [{
-            "type": "text",
-            "id": "extraClass",
-            "label": "Carousel-inner Extra Class"
-          }]
+          "type": "text",
+          "id": "positionTop",
+          "label": "Top"
         },
         {
-          "type": "carouselItem",
-          "name": "Start Carousel Item",
-          "settings": [{
-            "type": "text",
-            "id": "carouselItemClass",
-            "label": "Carousel Item Extra Class"
-          }]
+          "type": "text",
+          "id": "positionBottom",
+          "label": "Bottom"
         },
         {
-          "type": "endcarouselItem",
-          "name": "End Carousel Item"
+          "type": "text",
+          "id": "positionLeft",
+          "label": "Left"
         },
         {
-          "type": "endcarouselInner",
-          "name": "End Carousel Inner"
-        },
-        {
-          "type": "endcarousel",
-          "name": "End Carousel"
-        },
-        {
-          "type": "accordionStart",
-          "name": "Start Accordion",
-          "settings": [{
-              "type": "text",
-              "id": "accordionID",
-              "label": "Accordion Unique ID"
-            },
-            {
-              "type": "text",
-              "id": "accordionClass",
-              "label": "Accordion extra Class"
-            },
-            {
-              "type": "html",
-              "id": "accordioncustomHTML",
-              "label": "Custom Html"
-            }
-          ]
-        },
-        {
-          "type": "accordionItem",
-          "name": "Start Accordion Item",
-          "settings": [{
-              "type": "text",
-              "id": "accordionItemClass",
-              "label": "Accordion item extra Class"
-            },
-            {
-              "type": "text",
-              "id": "accordionHeaderID",
-              "label": "Accordion Header unique ID"
-            },
-            {
-              "type": "text",
-              "id": "accordionHeaderClass",
-              "label": "Accordion Header extra Class"
-            },
-            {
-              "type": "text",
-              "id": "accordionButtonText",
-              "label": "Accordion Button Text"
-            },
-    
-            {
-              "type": "text",
-              "id": "btnAfter",
-              "label": "Enter only Icon code For Down Arrow"
-            },
-            {
-              "type": "text",
-              "id": "btnbefore",
-              "label": "Enter only Icon code For Up Arrow"
-            },
-            {
-              "type": "text",
-              "id": "btnsize",
-              "label": "Button Icon Font-Size in (rem)"
-            },
-            {
-              "type": "text",
-              "id": "accordionButtonClass",
-              "label": "Btn Class(Remove Collapsed for active)",
-              "default": "collapsed"
-            },
-            {
-              "type": "text",
-              "id": "btnTarget",
-              "label": "Button Target"
-            },
-            {
-              "type": "select",
-              "id": "accordionButtonAriaexpanded",
-              "label": "Accordion Aria Expanded",
-              "options": [{
-                  "value": "true",
-                  "label": "True"
-                },
-                {
-                  "value": "false",
-                  "label": "False"
-                }
-              ],
-              "default": "false"
-            },
-            {
-              "type": "color",
-              "id": "btntextColor",
-              "label": "Button Text Color"
-            },
-            {
-              "type": "color",
-              "id": "btnBGcolor",
-              "label": "Accordion Button background Color"
-            },
-            {
-              "type": "text",
-              "id": "btnborderBottom",
-              "label": "Border Bottom Thickness in (rem)"
-            },
-            {
-              "type": "color",
-              "id": "btnBorderBottomColor",
-              "label": "Border Bottom Color"
-            },
-            {
-              "type": "html",
-              "id": "customHTML",
-              "label": "Custom Html"
-            }
-          ]
-        },
-        {
-          "type": "startColapseBody",
-          "name": "Start collapse Div",
-          "settings": [{
-              "type": "text",
-              "id": "collapseID",
-              "label": "Add ID same as Button Target"
-            },
-            {
-              "type": "text",
-              "id": "accordionClass",
-              "label": "Collapse Div Class(Add show for showing content)"
-            },
-            {
-              "type": "text",
-              "id": "arialabel",
-              "label": "Aria-label(Use same button Headr ID)"
-            },
-            {
-              "type": "text",
-              "id": "accordionParentID",
-              "label": "Data Parent (Use same id from Start Accordion block)"
-            }
-          ]
-        },
-        {
-          "type": "endCollapseBody",
-          "name": "End Collapse Div"
-        },
-        {
-          "type": "accordion-itemEnd",
-          "name": "End Accordion Item"
-        },
-        {
-          "type": "accordionEnd",
-          "name": "End Accordion"
+          "type": "text",
+          "id": "positionRight",
+          "label": "Right"
         }
-      ],
-      "presets": [{
-        "name": "Bs Dawn Content"
-      }]
-    }
-     
-    {% endschema %}
-    
-    {% stylesheet %}
-    {% endstylesheet %}
-    
-    {% javascript %}
-    {% endjavascript %}
-  
-  <!--     <script>
-  
-  
-  
-        $().ready(function(){
-            $('.popup-video, .image-popup-video').magnificPopup({
-              type: 'iframe',
-              mainClass: 'mfp-fade',
-              removalDelay: 160,
-              preloader: false,
-              fixedContentPos: false,
-    
-            patterns:{
-              youtube: {
-                index: 'youtube/',
-                id:'v=',
-                src:'https://www.youtube.com/embed/%id?autoplay=1'
+        ]
+      },
+      {
+        "type": "carouselindicatorsBtn",
+        "name": "Carousel Indicator Button",
+        "settings": [{
+            "type": "text",
+            "id": "carouselId",
+            "label": "Add Same ID which you used for carousel ID"
+          },
+          {
+            "type": "number",
+            "id": "slideNum",
+            "label": "Slide Number"
+          },
+          {
+            "type": "select",
+            "id": "indicatorsBtns",
+            "label": "Select Indicator Buttons",
+            "options": [
+              {
+                "value": "Buttons",
+                "label": "Buttons"
+              },
+              {
+                "value": "Dots",
+                "label": "Dots"
+              },
+              {
+                "value": "Default indicators",
+                "label": "Dash"
               }
-            },
-    
-              callbacks: {
-                change: function () {
-                  console.log('play event', this.currItem.src);
-                  if (typeof (ga) !== 'undefined') {
-                    ga('send', 'event', 'Videos', 'play', this.currItem.src);
-                  }
+            ],
+            "default": "Buttons"
+          },
+          {
+            "type": "text",
+            "id": "btnText",
+            "label": "Button Text"
+          },
+          {
+            "type": "select",
+            "id": "btn-size",
+            "label": "Button Size",
+            "options": [{
+                "value": "btn-lg",
+                "label": "Large button"
+              },
+              {
+                "value": "btn-sm",
+                "label": "Small button"
+              },
+              {
+                "value": " ",
+                "label": "Default"
+              }
+            ],
+            "default": " "
+          },
+          {
+            "type": "text",
+            "id": "btnClass",
+            "label": "Button Indicator Class"
+          },
+          {
+            "type": "color",
+            "id": "bgColor",
+            "label": "Buttons Background Color"
+          },
+          {
+            "type": "color",
+            "id": "activebgColor",
+            "label": "Button Active Background Color"
+          },
+          {
+            "type": "color",
+            "id": "btntextColor",
+            "label": "Button Text Color"
+          },
+          {
+            "type": "select",
+            "id": "arialabel",
+            "label": "Aria-label",
+            "options": [{
+                "value": "slide 1",
+                "label": "slide 1"
+              },
+              {
+                "value": "slide 2",
+                "label": "slide 2"
+              },
+              {
+                "value": "slide 3",
+                "label": "slide 3"
+              },
+              {
+                "value": "slide 4",
+                "label": "slide 4"
+              },
+              {
+                "value": "slide 5",
+                "label": "slide 5"
+              },
+              {
+                "value": "slide 6",
+                "label": "slide 6"
+              },
+              {
+                "value": "slide 7",
+                "label": "slide 7"
+              },
+              {
+                "value": "slide 8",
+                "label": "slide 8"
+              },
+              {
+                "value": "slide 9",
+                "label": "slide 9"
+              },
+              {
+                "value": "slide 10",
+                "label": "slide 10"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "id": "aria-current",
+            "label": "Aria Current"
+          }
+        ]
+      },
+      {
+        "type": "endcarouselIndicator",
+        "name": "End Carousel Indicators"
+      },
+      {
+        "type": "startCarousel-inner",
+        "name": "Start Carousel Inner",
+        "settings": [{
+          "type": "text",
+          "id": "extraClass",
+          "label": "Carousel-inner Extra Class"
+        }]
+      },
+      {
+        "type": "carouselItem",
+        "name": "Start Carousel Item",
+        "settings": [{
+          "type": "text",
+          "id": "carouselItemClass",
+          "label": "Carousel Item Extra Class"
+        }]
+      },
+      {
+        "type": "endcarouselItem",
+        "name": "End Carousel Item"
+      },
+      {
+        "type": "endcarouselInner",
+        "name": "End Carousel Inner"
+      },
+      {
+        "type": "endcarousel",
+        "name": "End Carousel"
+      },
+      {
+        "type": "accordionStart",
+        "name": "Start Accordion",
+        "settings": [{
+            "type": "text",
+            "id": "accordionID",
+            "label": "Accordion Unique ID"
+          },
+          {
+            "type": "text",
+            "id": "accordionClass",
+            "label": "Accordion extra Class"
+          },
+          {
+            "type": "html",
+            "id": "accordioncustomHTML",
+            "label": "Custom Html"
+          }
+        ]
+      },
+      {
+        "type": "accordionItem",
+        "name": "Start Accordion Item",
+        "settings": [{
+            "type": "text",
+            "id": "accordionItemClass",
+            "label": "Accordion item extra Class"
+          },
+          {
+            "type": "text",
+            "id": "accordionHeaderID",
+            "label": "Accordion Header unique ID"
+          },
+          {
+            "type": "text",
+            "id": "accordionHeaderClass",
+            "label": "Accordion Header extra Class"
+          },
+          {
+            "type": "text",
+            "id": "accordionButtonText",
+            "label": "Accordion Button Text"
+          },
+
+          {
+            "type": "text",
+            "id": "btnAfter",
+            "label": "Enter only Icon code For Down Arrow"
+          },
+          {
+            "type": "text",
+            "id": "btnbefore",
+            "label": "Enter only Icon code For Up Arrow"
+          },
+          {
+            "type": "text",
+            "id": "btnsize",
+            "label": "Button Icon Font-Size in (rem)"
+          },
+          {
+            "type": "text",
+            "id": "accordionButtonClass",
+            "label": "Btn Class(Remove Collapsed for active)",
+            "default": "collapsed"
+          },
+          {
+            "type": "text",
+            "id": "btnTarget",
+            "label": "Button Target"
+          },
+          {
+            "type": "select",
+            "id": "accordionButtonAriaexpanded",
+            "label": "Accordion Aria Expanded",
+            "options": [{
+                "value": "true",
+                "label": "True"
+              },
+              {
+                "value": "false",
+                "label": "False"
+              }
+            ],
+            "default": "false"
+          },
+          {
+            "type": "color",
+            "id": "btntextColor",
+            "label": "Button Text Color"
+          },
+          {
+            "type": "color",
+            "id": "btnBGcolor",
+            "label": "Accordion Button background Color"
+          },
+          {
+            "type": "text",
+            "id": "btnborderBottom",
+            "label": "Border Bottom Thickness in (rem)"
+          },
+          {
+            "type": "color",
+            "id": "btnBorderBottomColor",
+            "label": "Border Bottom Color"
+          },
+          {
+            "type": "html",
+            "id": "customHTML",
+            "label": "Custom Html"
+          }
+        ]
+      },
+      {
+        "type": "startColapseBody",
+        "name": "Start collapse Div",
+        "settings": [{
+            "type": "text",
+            "id": "collapseID",
+            "label": "Add ID same as Button Target"
+          },
+          {
+            "type": "text",
+            "id": "accordionClass",
+            "label": "Collapse Div Class(Add show for showing content)"
+          },
+          {
+            "type": "text",
+            "id": "arialabel",
+            "label": "Aria-label(Use same button Headr ID)"
+          },
+          {
+            "type": "text",
+            "id": "accordionParentID",
+            "label": "Data Parent (Use same id from Start Accordion block)"
+          }
+        ]
+      },
+      {
+        "type": "endCollapseBody",
+        "name": "End Collapse Div"
+      },
+      {
+        "type": "accordion-itemEnd",
+        "name": "End Accordion Item"
+      },
+      {
+        "type": "accordionEnd",
+        "name": "End Accordion"
+      },
+    {
+        "type": "productForCarousel",
+        "name": "+ Product for Carousel",
+        "settings": [{
+            "type": "product",
+            "id": "product_for_carousel",
+            "label": "Add Product"
+          },
+          {
+            "type":"text",
+            "id":"product_classes",
+            "label":"Product Classes",
+            "default":"mx-5"
+          },
+          {
+            "type":"image_picker",
+            "id":"product_image",
+            "label":"Product Image"
+          },
+          {
+            "type":"text",
+            "id":"product_image_classes",
+            "label":"Product Image Classes"
+
+          },
+          {
+            "type":"html",
+            "id":"title",
+            "label":"Product Title"
+          },
+          {
+            "type":"text",
+            "id":"title_classes",
+            "label":"Product Title Classes",
+            "default":"mt-3 text-uppercase fs-6 text-black text-center"
+          },
+          {
+            "type":"text",
+            "id":"product_price",
+            "label":"Product Price"
+          },
+          {
+            "type":"text",
+            "id":"price_classes",
+            "label":"Product Price Classes",
+            "default":"text-center fs-5"
+          },
+          {
+            "type":"text",
+            "id":"button_url",
+            "label":"Button URL"
+          },
+          {
+            "type":"text",
+            "id":"button_classes",
+            "label":"Button Classes",
+            "default":"text-decoration-none"
+          },
+          {
+            "type":"liquid",
+            "id":"custom_code",
+            "label":"Custom Code"
+          }
+        ]
+      }
+    ],
+    "presets": [{
+      "name": "SE BS Dawn Content"
+    }]
+  }
+
+  {% endschema %}
+
+  {% stylesheet %}
+  {% endstylesheet %}
+
+  {% javascript %}
+  {% endjavascript %}
+
+<!--     <script>
+
+
+
+      $().ready(function(){
+          $('.popup-video, .image-popup-video').magnificPopup({
+            type: 'iframe',
+            mainClass: 'mfp-fade',
+            removalDelay: 160,
+            preloader: false,
+            fixedContentPos: false,
+
+          patterns:{
+            youtube: {
+              index: 'youtube/',
+              id:'v=',
+              src:'https://www.youtube.com/embed/%id?autoplay=1'
+            }
+          },
+
+            callbacks: {
+              change: function () {
+                console.log('play event', this.currItem.src);
+                if (typeof (ga) !== 'undefined') {
+                  ga('send', 'event', 'Videos', 'play', this.currItem.src);
                 }
               }
-            });
-    
-            if (getUrlParameter('video')) {
-              var link = getUrlParameter('video');
-              $('.popup-video#' + link).click();
             }
-    
-        });
-    
-    
-    
-    
-    
-        </script> -->
-        
+          });
+
+          if (getUrlParameter('video')) {
+            var link = getUrlParameter('video');
+            $('.popup-video#' + link).click();
+          }
+
+      });
+
+
+
+
+
+      </script> -->
